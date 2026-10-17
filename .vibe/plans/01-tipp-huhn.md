@@ -283,7 +283,7 @@ after the push (`gh run list --workflow Pages --branch main --commit <commit>` l
 
 ### Tasks
 
-- [ ] Vor der ersten Veröffentlichung: Der Ersteller hat das Repo umbenannt (`git remote set-url origin` anpassen); `url` und `source` im Eintragsentwurf und im App-Titel auf den neuen Namen setzen.
+- [x] Vor der ersten Veröffentlichung: Der Ersteller hat das Repo umbenannt (`git remote set-url origin` anpassen); `url` und `source` im Eintragsentwurf und im App-Titel auf den neuen Namen setzen.
 - [x] Push the branch `work` (not `main`): `git push -u origin work`. The pre-push hook runs the heavy checks; fix
       what fails.
 - [x] Check the repo's settings on GitHub (no gh CLI here: the clicks are put to the creator at the checkpoint; the default branch is `work` until `main` exists): the default branch (`gh repo view --json defaultBranchRef`) and GitHub
