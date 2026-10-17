@@ -47,6 +47,7 @@ Mark a choice you made without asking the creator with "(guess)", and list it in
 - Ersteller im Eintrag: "mrsimpson" (guess: Name nicht genannt, Repo-Owner verwendet).
 - Oberfläche, Übungswörter und Layout in Deutsch und Englisch (Wunsch des Erstellers); Deutsch kommt zuerst, jede Sprache ist vollständig (interactive-app-valid).
 - Nur mit Hardware-Tastatur gedacht, nicht fürs Handy; das und der Zeitdruck kommen als "limits" in den Eintrag (guess).
+- Spielprinzip (Idee des Erstellers): Spaß und Herausforderung. Ein Level endet über eine Energieleiste des Huhns: verpasste Wörter (Zeit) und Tippfehler kosten Energie; Energie 0 beendet das Level.
 - Ruhige Gestaltung für Kinder: kein Blitzen, Explosion als sanfte Funken, Ton standardmäßig aus (Rat der Skill-Doku).
 
 ## Notes
