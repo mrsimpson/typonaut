@@ -6,11 +6,10 @@
   "course.de": "Deutsch mit deutscher Tastatur (QWERTZ)",
   "course.en": "Englisch mit englischer Tastatur (QWERTY)",
   "chapterTitle": "Kapitel {chapter}: {keys}",
-  "level1": "Level 1: Tasten kennenlernen",
-  "level2": "Level 2: Wörter",
-  "level3": "Level 3: Mix",
+  "level1": "Tasten kennenlernen",
+  "level2": "Wörter",
+  "level3": "Mix",
   "levelInfo": "{words} Kometen kommen. Tippe jeden ab, bevor er das Raumschiff erreicht.",
-  "start": "Los geht's",
   "keysHelp": "Mit den Tasten 1, 2 und 3 wählst du ein Level, mit Enter startest du.",
   "where": "Kapitel {chapter} · Level {level}",
   "score": "Sternenstaub {score}",
@@ -55,5 +54,10 @@
   "legend.lp": "kleiner Finger",
   "legend.lr": "Ringfinger",
   "legend.lm": "Mittelfinger",
-  "legend.li": "Zeigefinger"
+  "legend.li": "Zeigefinger",
+  "chapter": "Kapitel {chapter}",
+  "record": "Gesammelter Sternenstaub: {dust}",
+  "startButton": "START",
+  "levels": "Level",
+  "stars": "{n} von 3 Sternen"
 }

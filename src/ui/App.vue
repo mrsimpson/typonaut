@@ -41,6 +41,14 @@ const levels = [1, 2, 3] as const;
 const routeOf = (courseId: string, chapter: number): string => `${courseId}-${chapter}`;
 const chapterTitle = (chapter: number, keys: string): string =>
   chapter === 1 ? t.value("chapterHome") : chapter === 2 ? t.value("chapterCapitals") : keys.split("").join(" ");
+const newKeys = computed(() =>
+  [...(course.value.chapters[props.state.chapter - 1]?.keys ?? "")].filter((char) => char !== " "),
+);
+const keysTitle = computed(() =>
+  chapterTitle(props.state.chapter, course.value.chapters[props.state.chapter - 1]?.keys ?? ""),
+);
+const bestStars = (chapter: number): number =>
+  Math.max(...(progress.value[routeOf(props.state.course, chapter)]?.stars ?? [0]));
 const dustOf = (route: string): number => progress.value[route]?.dust ?? 0;
 const start = (): void => emit("input", { kind: "action", name: "start" });
 const choose = (level: 1 | 2 | 3, event: Event): void => {
@@ -143,52 +151,56 @@ watch(
 <template>
   <section class="game" :aria-label="t('game')">
     <template v-if="state.phase === 'menu'">
-      <h2 class="course">{{ t(`course.${state.course}`) }}</h2>
-      <nav class="chapters" :aria-label="t('chapters')">
+      <header class="marquee">
+        <h2 class="logo">TYPONAUT</h2>
+        <p class="tagline">{{ t(`course.${state.course}`) }}</p>
+        <a class="switch" :href="`#${state.course === 'de' ? 'en' : 'de'}-1`">{{
+          t(`switchTo.${state.course === "de" ? "en" : "de"}`)
+        }}</a>
+      </header>
+
+      <nav class="planets" :aria-label="t('chapters')">
         <a
           v-for="chapter in course.chapters"
           :key="chapter.id"
-          class="chapter"
+          class="planet"
           :href="`#${routeOf(state.course, chapter.id)}`"
           :aria-current="chapter.id === state.chapter ? 'true' : undefined"
+          :style="{ '--hue': `${(chapter.id * 47) % 360}` }"
         >
-          <span class="number">{{ chapter.id }}</span>
-          <span class="keys">{{ chapterTitle(chapter.id, chapter.keys) }}</span>
-          <span class="stars">{{
-            "★".repeat(Math.max(...(progress[routeOf(state.course, chapter.id)]?.stars ?? [0])))
+          <span class="globe">{{ chapter.id }}</span>
+          <span class="stars" :aria-label="t('stars', { n: bestStars(chapter.id) })">{{
+            "★".repeat(bestStars(chapter.id)) || "·"
           }}</span>
-          <span class="dust">{{ dustOf(routeOf(state.course, chapter.id)) }} ✦</span>
         </a>
       </nav>
-      <p class="other">
-        <a :href="`#${state.course === 'de' ? 'en' : 'de'}-1`">{{
-          t(`switchTo.${state.course === "de" ? "en" : "de"}`)
-        }}</a>
-      </p>
-      <h3>
-        {{
-          t("chapterTitle", {
-            chapter: state.chapter,
-            keys: chapterTitle(state.chapter, course.chapters[state.chapter - 1]?.keys ?? ""),
-          })
-        }}
-      </h3>
-      <div class="levels">
+
+      <section class="briefing" :aria-label="t('chapterTitle', { chapter: state.chapter, keys: keysTitle })">
+        <p class="stage">{{ t("chapter", { chapter: state.chapter }) }}</p>
+        <p class="keycaps" aria-hidden="true">
+          <span v-for="(key, index) in newKeys" :key="index" class="cap">{{ key }}</span>
+        </p>
+        <p v-if="state.chapter < 3" class="keys-title">{{ keysTitle }}</p>
+        <p class="record">{{ t("record", { dust: dustOf(state.route) }) }}</p>
+      </section>
+
+      <div class="stages" role="group" :aria-label="t('levels')">
         <button
           v-for="level in levels"
           :key="level"
           type="button"
-          class="level"
+          class="stage-button"
           :class="{ chosen: level === state.level }"
           :aria-pressed="level === state.level"
           @click="choose(level, $event)"
         >
-          {{ t(`level${level}`) }}
-          <span class="stars">{{ "★".repeat(starsOf(progress, state.route, level)) }}</span>
+          <span class="stage-number">{{ level }}</span>
+          <span class="stage-name">{{ t(`level${level}`) }}</span>
+          <span class="stars">{{ "★".repeat(starsOf(progress, state.route, level)) || "☆☆☆" }}</span>
         </button>
       </div>
-      <p>{{ t("levelInfo", { words: LEVELS[state.level].total }) }}</p>
-      <button type="button" class="primary" @click="start">{{ t("start") }}</button>
+      <p class="info">{{ t("levelInfo", { words: LEVELS[state.level].total }) }}</p>
+      <button type="button" class="start" @click="start">{{ t("startButton") }}</button>
       <p class="small">{{ t("keysHelp") }}</p>
     </template>
 
@@ -286,12 +298,28 @@ watch(
   </section>
 </template>
 
+<style>
+.interactive-routes {
+  display: none;
+}
+</style>
+
 <style scoped>
 .game {
   padding: 1rem;
-  border-radius: 0.5rem;
-  background: #0f1535;
+  border: 3px solid #5ce1e6;
+  border-radius: 1rem;
+  background:
+    radial-gradient(circle at 12% 18%, #ffffff 0, #ffffff 1px, transparent 2px),
+    radial-gradient(circle at 78% 10%, #ffffff 0, #ffffff 1px, transparent 2px),
+    radial-gradient(circle at 90% 70%, #ffffff 0, #ffffff 1px, transparent 2px),
+    radial-gradient(circle at 30% 85%, #ffffff 0, #ffffff 1px, transparent 2px), #0b1030;
+  box-shadow:
+    0 0 1.2rem #5ce1e655,
+    inset 0 0 2rem #0006;
   color: #e8ecff;
+  font-family: ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace;
+  letter-spacing: 0.02em;
 }
 
 h2,
@@ -303,47 +331,133 @@ a {
   color: #ffd166;
 }
 
-.chapters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
+.marquee {
+  text-align: center;
 }
 
-.chapter {
-  display: grid;
-  grid-template-columns: 1.5rem 1fr;
-  gap: 0 0.4rem;
-  min-width: 8rem;
-  padding: 0.4rem 0.6rem;
-  border: 2px solid #3a4585;
-  border-radius: 0.5rem;
-  color: #e8ecff;
-  text-decoration: none;
+.logo {
+  margin: 0;
+  color: #5ce1e6;
+  font-size: clamp(2rem, 9vw, 3.5rem);
+  letter-spacing: 0.25em;
+  text-shadow:
+    0 0 0.6rem #5ce1e6aa,
+    0.12em 0.12em 0 #ff6ad5;
 }
 
-.chapter[aria-current="true"] {
-  border-color: #ffd166;
-  background: #1c2557;
-}
-
-.number {
-  grid-row: span 2;
-  align-self: center;
+.tagline {
+  margin: 0.2rem 0;
+  color: #ff6ad5;
   font-weight: 700;
+  text-transform: uppercase;
 }
 
-.stars,
-.dust {
-  color: #ffd166;
+.switch {
   font-size: 0.85rem;
 }
 
-.levels,
+.planets {
+  display: grid;
+  grid-template-columns: repeat(6, auto);
+  justify-content: center;
+  gap: 0.6rem 1.1rem;
+  margin: 1rem 0;
+}
+
+.planet {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  color: #ffd166;
+  text-decoration: none;
+}
+
+.globe {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, hsl(var(--hue) 85% 80%), hsl(var(--hue) 70% 50%));
+  box-shadow: 0 0 0.6rem hsl(var(--hue) 80% 60% / 0.5);
+  color: #0b1030;
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+.planet[aria-current="true"] .globe {
+  outline: 3px solid #ffffff;
+  outline-offset: 3px;
+  transform: scale(1.18);
+}
+
+.planet:hover .globe,
+.planet:focus-visible .globe {
+  transform: scale(1.1);
+}
+
+.stars {
+  min-height: 1.1rem;
+  color: #ffd166;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+}
+
+.briefing {
+  margin: 0.5rem 0;
+  text-align: center;
+}
+
+.stage {
+  margin: 0;
+  color: #b8c0f0;
+  text-transform: uppercase;
+}
+
+.keycaps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+  margin: 0.4rem 0;
+}
+
+.cap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.6rem;
+  height: 2.6rem;
+  padding: 0 0.3rem;
+  border: 2px solid #ffd166;
+  border-bottom-width: 5px;
+  border-radius: 0.5rem;
+  background: #1c2557;
+  color: #ffd166;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.keys-title {
+  margin: 0.2rem 0;
+  font-weight: 700;
+}
+
+.record {
+  margin: 0.2rem 0;
+  color: #ffd166;
+  font-size: 0.9rem;
+}
+
+.stages,
 .buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 0.5rem 0;
+  justify-content: center;
+  gap: 0.6rem;
+  margin: 0.8rem 0;
 }
 
 button {
@@ -356,26 +470,91 @@ button {
   cursor: pointer;
 }
 
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.stage-button {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0 0.6rem;
+  flex: 1 1 9rem;
+  max-width: 13rem;
+  border-color: #5ce1e6;
+  text-align: left;
 }
 
-button.chosen,
-button[aria-pressed="true"] {
+.stage-button .stars {
+  grid-column: 2;
+}
+
+.stage-number {
+  grid-row: span 2;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #5ce1e6;
+}
+
+.stage-button.chosen {
   border-color: #ffd166;
+  background: #2a2f6b;
+  box-shadow: 0 0 0.8rem #ffd16688;
+}
+
+.info {
+  text-align: center;
+}
+
+.start {
+  display: block;
+  margin: 0.8rem auto;
+  padding: 0.7rem 2.5rem;
+  border: 3px solid #ffd166;
+  border-radius: 2rem;
+  background: #ff6ad5;
+  box-shadow:
+    0 0.25rem 0 #a1318a,
+    0 0 1rem #ff6ad588;
+  color: #0b1030;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  animation: glow 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  to {
+    box-shadow:
+      0 0.25rem 0 #a1318a,
+      0 0 1.6rem #ff6ad5cc;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .start {
+    animation: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .planets {
+    gap: 0.6rem 0.4rem;
+  }
+
+  .globe {
+    width: 2.3rem;
+    height: 2.3rem;
+  }
 }
 
 .primary {
   border-color: #4cc9a7;
   background: #4cc9a7;
-  color: #0f1535;
+  color: #0b1030;
   font-weight: 700;
 }
 
 .small {
   color: #b8c0f0;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  text-align: center;
 }
 
 .hud {

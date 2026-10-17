@@ -71,7 +71,7 @@ The analysis after a round lists the three keys with the most mistakes, the keys
 
 ## Figures
 
-There are no bundled images. The keyboard (`src/ui/Keyboard.vue`) is drawn from the layout of the course, the fingers in
+There are no bundled images. The look is an arcade cabinet: dark space, neon cyan and pink, monospace capitals, a stage select (a row of coloured planets for the chapters, keycaps for the new keys, three stage buttons, a pink START button); nothing flashes, the glow of START pulses slowly and stops with reduced motion. The keyboard (`src/ui/Keyboard.vue`) is drawn from the layout of the course, the fingers in
 four colours (little finger, ring, middle, index) with dark text on light colour for contrast; the key to type next is white with an outline. It is decoration for
 the hint, `aria-hidden`; the hint text says the same in words. The field with the comets is decoration; what happens is announced
 (`announce`). Comets are plain text in a monospace font; no pictures, no sound, nothing flashes; reduced motion switches the wobble off.

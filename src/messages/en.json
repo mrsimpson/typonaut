@@ -6,11 +6,10 @@
   "course.de": "German with a German keyboard (QWERTZ)",
   "course.en": "English with an English keyboard (QWERTY)",
   "chapterTitle": "Chapter {chapter}: {keys}",
-  "level1": "Level 1: Get to know the keys",
-  "level2": "Level 2: Words",
-  "level3": "Level 3: Mix",
+  "level1": "Get to know the keys",
+  "level2": "Words",
+  "level3": "Mix",
   "levelInfo": "{words} comets are coming. Type each one before it reaches the spaceship.",
-  "start": "Let's go",
   "keysHelp": "Press 1, 2 or 3 to choose a level and Enter to start.",
   "where": "Chapter {chapter} · Level {level}",
   "score": "Stardust {score}",
@@ -54,5 +53,10 @@
   "legend.lp": "little finger",
   "legend.lr": "ring finger",
   "legend.lm": "middle finger",
-  "legend.li": "index finger"
+  "legend.li": "index finger",
+  "chapter": "Chapter {chapter}",
+  "record": "Stardust collected: {dust}",
+  "startButton": "START",
+  "levels": "Level",
+  "stars": "{n} of 3 stars"
 }
