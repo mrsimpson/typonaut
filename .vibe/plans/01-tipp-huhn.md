@@ -45,7 +45,7 @@ Mark a choice you made without asking the creator with "(guess)", and list it in
 - Lehrgang als Daten je Layout (QWERTZ/Deutsch, QWERTY/Englisch), Reihenfolge nach dem Schwyzer Leitfaden: Grundreihe, Großbuchstaben, dann paarweise neue Tasten.
 - Veröffentlichung unter https://mrsimpson.github.io/tipp-huhn/ (aus dem Repo-Owner abgeleitet).
 - Ersteller im Eintrag: "mrsimpson" (guess: Name nicht genannt, Repo-Owner verwendet).
-- Oberfläche (Texte) zunächst nur Deutsch (guess); Übungswörter und Layout deutsch und englisch.
+- Oberfläche, Übungswörter und Layout in Deutsch und Englisch (Wunsch des Erstellers); Deutsch kommt zuerst, jede Sprache ist vollständig (interactive-app-valid).
 - Nur mit Hardware-Tastatur gedacht, nicht fürs Handy; das und der Zeitdruck kommen als "limits" in den Eintrag (guess).
 - Ruhige Gestaltung für Kinder: kein Blitzen, Explosion als sanfte Funken, Ton standardmäßig aus (Rat der Skill-Doku).
 
@@ -140,12 +140,19 @@ what is not known yet, such as the app's address before it is published. The lis
 
 ```yaml
 title: Tipp-Huhn
-subject: Informatik
+subject:
+  de: Informatik
+  en: Computer Science
 grades: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
-summary: >-
-  Lerne das Zehnfingersystem Schritt für Schritt, von der Grundreihe bis zur ganzen Tastatur.
-  Wörter fliegen in einem Bogen über den Bildschirm; tippst du sie richtig ab, explodieren sie
-  und du sammelst Punkte. Mit deutscher und englischer Tastatur.
+summary:
+  de: >-
+    Lerne das Zehnfingersystem Schritt für Schritt, von der Grundreihe bis zur ganzen Tastatur.
+    Wörter fliegen in einem Bogen über den Bildschirm; tippst du sie richtig ab, explodieren sie
+    und du sammelst Punkte. Mit deutscher und englischer Tastatur.
+  en: >-
+    Learn touch typing step by step, from the home row to the whole keyboard. Words fly across
+    the screen in an arc; type them correctly and they burst and score points. With a German or
+    an English keyboard.
 url: https://mrsimpson.github.io/tipp-huhn/
 creator:
   name: mrsimpson
