@@ -30,6 +30,15 @@ export interface KeyStat {
   instead: Record<string, number>;
 }
 
+/** A typed comet bursting into stardust: where, for how many points and when (milliseconds of the level). */
+export interface Burst {
+  id: number;
+  x: number;
+  y: number;
+  points: number;
+  at: number;
+}
+
 export type Last = "menu" | "start" | "pick" | "hit" | "wrong" | "destroyed" | "missed" | "won" | "lost" | "level";
 
 export interface State {
@@ -47,6 +56,7 @@ export interface State {
   time: number;
   lastSpawn: number;
   comets: Comet[];
+  bursts: Burst[];
   nextId: number;
   /** The id of the comet being typed, 0 when none. */
   target: number;
@@ -90,6 +100,8 @@ const MAX_SHIELD = 100;
 const ERROR_COST = 3;
 const HIT_GAIN = 4;
 const RESPAWN_PAUSE = 800;
+/** How long a burst of stardust stays on the field, in milliseconds. */
+export const BURST_TIME = 900;
 
 /** The next random number from 0 to 1 of the state's stream (mulberry32); it advances `rng` of `state`. */
 function random(state: { rng: number }): number {
@@ -116,6 +128,7 @@ export function start(seed: number, route: string): State {
     time: 0,
     lastSpawn: 0,
     comets: [],
+    bursts: [],
     nextId: 1,
     target: 0,
     shield: MAX_SHIELD,
@@ -273,7 +286,10 @@ function typeKey(state: State, key: string): State {
     return next;
   }
   const factor = 1 + 0.1 * Math.min(next.combo, 10);
-  next.score += Math.round(difficulty(comet.word, chapterKeys(next)) * 10 * factor);
+  const points = Math.round(difficulty(comet.word, chapterKeys(next)) * 10 * factor);
+  next.score += points;
+  const { x, y } = positionOf(comet, next.time);
+  next.bursts.push({ id: comet.id, x, y, points, at: next.time });
   next.combo += 1;
   next.bestCombo = Math.max(next.bestCombo, next.combo);
   next.destroyed += 1;
@@ -338,6 +354,7 @@ export function tick(state: State, dt: number): State {
   if (state.phase !== "play") return state;
   const next = structuredClone(state);
   next.time += dt;
+  next.bursts = next.bursts.filter((burst) => next.time - burst.at < BURST_TIME);
   const settings = LEVELS[next.level];
   for (const comet of [...next.comets]) {
     if (next.time - comet.born < comet.flight) continue;

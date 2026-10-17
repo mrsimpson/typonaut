@@ -178,6 +178,14 @@ watch(
             char
           }}</span>
         </span>
+        <span
+          v-for="burst in state.bursts"
+          :key="burst.id"
+          class="burst"
+          :class="{ still: reduced }"
+          :style="{ left: `${burst.x}%`, top: `${burst.y}%` }"
+          >✦ +{{ burst.points }}</span
+        >
         <span class="ship" :style="ship">▲</span>
       </div>
       <div class="shield" aria-hidden="true">
@@ -362,6 +370,25 @@ button[aria-pressed="true"] {
 
   75% {
     transform: translate(-48%, -50%);
+  }
+}
+
+.burst {
+  position: absolute;
+  color: #ffd166;
+  font-weight: 700;
+  transform: translate(-50%, -50%);
+  animation: rise 0.9s ease-out forwards;
+}
+
+.burst.still {
+  animation: none;
+}
+
+@keyframes rise {
+  to {
+    opacity: 0;
+    transform: translate(-50%, -150%);
   }
 }
 

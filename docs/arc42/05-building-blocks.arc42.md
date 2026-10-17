@@ -637,7 +637,7 @@ protocol: TypeScript module exports
 ### Game rules
 
 The comets and the rules live in `index.ts`: the three levels, the flight arcs, picking a comet by its first letter, the
-shield, the score with its combo and the stars. It draws everything from the seed. Unit tests sit next to it.
+shield, the score with its combo, the bursts of stardust and the stars. It draws everything from the seed. Unit tests sit next to it.
 
 ```arc42
 :::diagram

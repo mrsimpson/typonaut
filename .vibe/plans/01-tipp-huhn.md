@@ -4,7 +4,7 @@
 # archetype: the kind of app, chosen at the end of Explore: explainer, interactive or quiz. null until then.
 archetype: interactive
 # phase: the phase you work in now: explore, plan, code or commit. Change it when you enter the next phase.
-phase: code
+phase: commit
 # prePushFailures: failed runs of the pre-push hook. The hook counts them. Never change this value.
 prePushFailures: 0
 ---
@@ -53,6 +53,9 @@ Mark a choice you made without asking the creator with "(guess)", and list it in
 - Verloren: Level wiederholen ohne Strafe, mit Analyse (welche Tasten die meisten Fehler brachten).
 - Punkte liegen als Konto pro Kapitel; später daraus Powerups für das nächste Level wählbar.
 - Spielprinzip (Idee des Erstellers): Spaß und Herausforderung. Ein Level endet über eine Energieleiste des Huhns: verpasste Wörter (Zeit) und Tippfehler kosten Energie; Energie 0 beendet das Level.
+- Keine gesperrten Level: Sterne und Sternenstaub werden gespeichert und angezeigt, aber kein Level und kein Kapitel ist gesperrt (der Kern kennt das Gerät nicht, Lehrkräfte öffnen jedes Kapitel per Adresse). Abweichung vom Plan ("ein Stern schaltet das nächste Level frei"); Sperren und Powerups sind ein späteres Inkrement.
+- Playthroughs tippen nur Tasten einer US-Tastatur (die Tests des Runtimes kennen kein ö, ä, ü, ß); Umlaute prüfen die Unit-Tests der Daten.
+- Wortlisten: vom Assistenten geschrieben und per Skript nach freigeschalteten Tasten auf Kapitel verteilt (guess: Wortschatz und Auswahl nicht mit einer Lehrkraft abgestimmt).
 - Ruhige Gestaltung für Kinder: kein Blitzen, Explosion als sanfte Funken, Ton standardmäßig aus (Rat der Skill-Doku).
 
 ## Notes
@@ -236,29 +239,29 @@ one of them, stop and ask the creator to allow it, then run the command again. N
 
 ### Tasks
 
-- [ ] Generate the app in the folder that holds this plan: `npx --yes github:lernapps/tooling#main create --archetype
+- [x] Generate the app in the folder that holds this plan: `npx --yes github:lernapps/tooling#main create --archetype
       <archetype>`. Nothing needs to be installed first. The generator keeps this plan where it is.
-- [ ] Run `git init --initial-branch=work` if the folder is not a git repository yet; in one, `git switch -c work` if
+- [x] Run `git init --initial-branch=work` if the folder is not a git repository yet; in one, `git switch -c work` if
       you are not on `work` yet. Then run `npm install`: it installs the dependencies and the git hooks. From now on,
       everything runs from the app's own `node_modules`: `npx lernapps check`, the hooks.
-- [ ] Commit what the generator wrote, with this plan: the first commit.
-- [ ] Load the skill `lernapps-app` and the skill of the archetype.
-- [ ] Fill in the content guide `.agents/skills/app-content/SKILL.md`, which the generator wrote, from the confirmed
+- [x] Commit what the generator wrote, with this plan: the first commit.
+- [x] Load the skill `lernapps-app` and the skill of the archetype.
+- [x] Fill in the content guide `.agents/skills/app-content/SKILL.md`, which the generator wrote, from the confirmed
       plan and its content method, before you build the content: replace every "FILL IN" with precise, concrete
       instructions, as its comments show (the skill `lernapps-exercise-patterns` helps with its patterns). Commit it.
       Whenever a content decision changes later, update it in the same commit: this plan records the run, the guide
       stays for the agents after you.
-- [ ] Layouts: `src/data/` mit Layout und Fingerzuordnung für QWERTZ und QWERTY, mit Quelle; Datentest. Commit.
-- [ ] Kern: Kometenbahnen (Parabel, deterministisch aus Seed), Auswahl und Sperre des Wortes, Treffer, Fehler, Schild, Punkte mit Kombo, Level gewonnen/verloren, Fehlerstatistik je Taste. Dazu Playthroughs: Wort wählen und tippen; falsche Taste; Komet erreicht das Schiff; Level verloren; gleicher Seed, gleicher Ablauf. Commit.
-- [ ] Kursdaten Deutsch, Kapitel 1 bis 12, mit Wörtern und Datentest. Commit je Kapitelgruppe.
-- [ ] Kursdaten Englisch, Kapitel 1 bis 12, mit Wörtern und Datentest. Commit je Kapitelgruppe.
-- [ ] Oberfläche: Karte der Reise (Kapitel, Level, Sterne, Konto), Spielbildschirm nach `sketches/spiel.png` (Schweif färbt sich, Tastaturhilfe nur in Level 1 und 2), Ergebnis und Analyse nach `sketches/ergebnis.png`; Kurs- und Sprachwahl; alles per Tastatur bedienbar; Ansagen über `announce`. Commit.
-- [ ] Texte Deutsch und Englisch in `src/messages/` vollständig; `app.yaml` mit Anleitung, Kompetenzen, Routen. Commit.
-- [ ] Speichern: Sterne und Sternenstaub je Kapitel mit `createStorage`, unter 100 kB. Commit.
-- [ ] Ruhe und Bewegung: `prefersReducedMotion`, kein Blitzen, Ton aus. Commit.
-- [ ] Architektur in `docs/arc42/` mit jedem Teil. In jedem Commit mit Code.
-- [ ] `npx lernapps check` passes.
-- [ ] Set `phase: commit`.
+- [x] Layouts: `src/data/` mit Layout und Fingerzuordnung für QWERTZ und QWERTY, mit Quelle; Datentest. Commit.
+- [x] Kern: Kometenbahnen (Parabel, deterministisch aus Seed), Auswahl und Sperre des Wortes, Treffer, Fehler, Schild, Punkte mit Kombo, Level gewonnen/verloren, Fehlerstatistik je Taste. Dazu Playthroughs: Wort wählen und tippen; falsche Taste; Komet erreicht das Schiff; Level verloren; gleicher Seed, gleicher Ablauf. Commit.
+- [x] Kursdaten Deutsch, Kapitel 1 bis 12, mit Wörtern und Datentest. Commit je Kapitelgruppe.
+- [x] Kursdaten Englisch, Kapitel 1 bis 12, mit Wörtern und Datentest. Commit je Kapitelgruppe.
+- [x] Oberfläche: Karte der Reise (Kapitel, Level, Sterne, Konto), Spielbildschirm nach `sketches/spiel.png` (Schweif färbt sich, Tastaturhilfe nur in Level 1 und 2), Ergebnis und Analyse nach `sketches/ergebnis.png`; Kurs- und Sprachwahl; alles per Tastatur bedienbar; Ansagen über `announce`. Commit.
+- [x] Texte Deutsch und Englisch in `src/messages/` vollständig; `app.yaml` mit Anleitung, Kompetenzen, Routen. Commit.
+- [x] Speichern: Sterne und Sternenstaub je Kapitel mit `createStorage`, unter 100 kB. Commit.
+- [x] Ruhe und Bewegung: `prefersReducedMotion`, kein Blitzen, Ton aus. Commit.
+- [x] Architektur in `docs/arc42/` mit jedem Teil. In jedem Commit mit Code.
+- [x] `npx lernapps check` passes.
+- [x] Set `phase: commit`.
 
 ### Completed
 

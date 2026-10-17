@@ -1,4 +1,5 @@
 import { describe, expect, test } from "vite-plus/test";
+import { COURSES } from "./course.ts";
 import { LEVELS, SHIP, positionOf, start, step, tick, type State } from "./index.ts";
 
 const press = (state: State, ...keys: string[]): State =>
@@ -96,5 +97,35 @@ describe("the game", () => {
     expect(end).toMatchObject({ x: SHIP.x, y: SHIP.y, progress: 1 });
     const middle = positionOf(comet, comet.born + comet.flight / 2);
     expect(middle.y).toBeLessThan((comet.startY + SHIP.y) / 2);
+  });
+});
+
+describe("every chapter of both courses", () => {
+  const routes = Object.entries(COURSES).flatMap(([course, data]) =>
+    data.chapters.map((chapter) => `${course}-${chapter.id}`),
+  );
+
+  test.each(routes)("%s can be won on every level by typing each comet", (route) => {
+    for (const level of [1, 2, 3] as const) {
+      let state = press(start(7, route), String(level), "Enter");
+      for (let ticks = 0; state.phase === "play" && ticks < 20000; ticks++) {
+        state = tick(state, 20);
+        const comet = state.comets[0];
+        if (comet !== undefined) state = press(state, ...comet.word.split(""));
+      }
+      expect(state, `${route} level ${level}`).toMatchObject({
+        phase: "won",
+        stars: 3,
+        destroyed: LEVELS[level].total,
+      });
+    }
+  });
+
+  test("a burst of stardust stays for a short time and then goes", () => {
+    let state = firstComet("de-1", 1);
+    state = press(state, ...(state.comets[0]?.word.split("") ?? []));
+    expect(state.bursts).toHaveLength(1);
+    for (let i = 0; i < 50; i++) state = tick(state, 20);
+    expect(state.bursts).toHaveLength(0);
   });
 });
