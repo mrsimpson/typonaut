@@ -47,7 +47,8 @@ Mark a choice you made without asking the creator with "(guess)", and list it in
 - Ersteller im Eintrag: "mrsimpson" (guess: Name nicht genannt, Repo-Owner verwendet).
 - Oberfläche, Übungswörter und Layout in Deutsch und Englisch (Wunsch des Erstellers); Deutsch kommt zuerst, jede Sprache ist vollständig (interactive-app-valid).
 - Nur mit Hardware-Tastatur gedacht, nicht fürs Handy; das und der Zeitdruck kommen als "limits" in den Eintrag (guess).
-- Thema Huhn entfällt (Moorhuhn kennt die Zielgruppe nicht). Kandidat: Weltraumreise, Wörter als Kometen/Asteroiden; Name und Thema offen bis zur Bestätigung.
+- Thema Huhn entfällt (Moorhuhn kennt die Zielgruppe nicht). Thema bestätigt: Weltraumreise, Wörter als Kometen mit Schweif, Energie = Schutzschild, Sternenstaub als Punktekonto pro Kapitel (Kapitel = Planeten/Stationen).
+- Name der App: wird noch bestimmt (offen). Der Ersteller benennt das Repo vor der Veröffentlichung um; die Adresse im Eintrag (`url`, `source`) ist bis dahin vorläufig und wird mit dem neuen Repo-Namen ersetzt, bevor der Eintrag gelistet wird. Der Titel im Eintrag und in der App folgt dem Namen.
 - Wort wählen: erster Buchstabe wählt das ältere Wort mit diesem Anfang, es bleibt gesperrt; jeder richtig getippte Buchstabe färbt sich um.
 - Verloren: Level wiederholen ohne Strafe, mit Analyse (welche Tasten die meisten Fehler brachten).
 - Punkte liegen als Konto pro Kapitel; später daraus Powerups für das nächste Level wählbar.
@@ -257,6 +258,7 @@ after the push (`gh run list --workflow Pages --branch main --commit <commit>` l
 
 ### Tasks
 
+- [ ] Vor der ersten Veröffentlichung: Der Ersteller hat das Repo umbenannt (`git remote set-url origin` anpassen); `url` und `source` im Eintragsentwurf und im App-Titel auf den neuen Namen setzen.
 - [ ] Push the branch `work` (not `main`): `git push -u origin work`. The pre-push hook runs the heavy checks; fix
       what fails.
 - [ ] Check the repo's settings on GitHub: the default branch (`gh repo view --json defaultBranchRef`) and GitHub
