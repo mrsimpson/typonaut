@@ -307,7 +307,7 @@ after the push (`gh run list --workflow Pages --branch main --commit <commit>` l
       them again when they are done.
 - [x] Set the default branch to `main`: `gh repo edit --default-branch main`, or the creator's clicks from the
       checkpoint. The run of `Pages` warns while it is another branch.
-- [ ] Open the address the job `deploy` printed ("published at ...", also in the run's summary) and confirm that it
+- [x] Open the address the job `deploy` printed (https://mrsimpson.github.io/typonaut/, opened in a browser: arcade menu, a round started, English start page 200, no console errors) ("published at ...", also in the run's summary) and confirm that it
       shows the app. Take that address, never one you derive: a repo whose owner has its own domain is served there,
       and its github.io address only redirects to it. The job ends only once the app answers at that address, so do
       not wait for it yourself; when you open an address, follow its redirects.
@@ -332,7 +332,7 @@ it with the listing; the evals compare it across runs. It stays in the creator's
 
 ### Phases reached
 
-<!-- The last phase you completed and the checkpoints the creator passed. Example: "commit; confirmed, published". -->
+commit (published); research, plan and publish confirmed. The listing checkpoint is not passed yet.
 
 ### Failed checks
 
@@ -341,9 +341,11 @@ Each check that failed, with its rule id and how often. Example: "`no-request-be
 Leave out the failed pre-push runs: the hook counts them in the front matter.
 -->
 
+`checks-pass`: 3 pre-commit failures from the architecture diff hints of the generated code, accepted after review with `ARC42_CONSISTENT`; 1 failed `lernapps check` for playthroughs that typed ö (template e2e tests cannot); 1 for number formats (1.754) in announcements. The Pages run failed twice at publish because GitHub Pages was off (an admin setting).
+
 ### Creator turns after the plan
 
-<!-- How many messages the creator sent after confirming the plan, and what each was about. Target: at most 3. -->
+5: build it on its own and have an agent playtest it; the repo is renamed; Pages cannot be switched before the branch exists; the level choice must feel like an arcade game; Pages is switched.
 
 ### Where I had to guess
 
@@ -351,3 +353,5 @@ Leave out the failed pre-push runs: the hook counts them in the front matter.
 Each place where this plan, a skill, a message or the creator's answers did not tell you what to do, and what you
 chose. Write "None" if there was none.
 -->
+
+No locked levels (the core cannot read the device); word lists written by the assistant and spread over chapters by a script; fingers of y, ß, - and ? (German) and z, ', ? and - (English) from the usual charts, not from a source; the pace of levels 2 and 3 from a bot playtest at a child's tempo; Ersteller shown as "mrsimpson" in the entry; the README added so that a push publishes (a push of only `.vibe/` does not); `ARC42_CONSISTENT` used after review; the creator's "publish" yes was read from the rename and the wish to switch Pages.
