@@ -47,6 +47,10 @@ Mark a choice you made without asking the creator with "(guess)", and list it in
 - Ersteller im Eintrag: "mrsimpson" (guess: Name nicht genannt, Repo-Owner verwendet).
 - Oberfläche, Übungswörter und Layout in Deutsch und Englisch (Wunsch des Erstellers); Deutsch kommt zuerst, jede Sprache ist vollständig (interactive-app-valid).
 - Nur mit Hardware-Tastatur gedacht, nicht fürs Handy; das und der Zeitdruck kommen als "limits" in den Eintrag (guess).
+- Thema Huhn entfällt (Moorhuhn kennt die Zielgruppe nicht). Kandidat: Weltraumreise, Wörter als Kometen/Asteroiden; Name und Thema offen bis zur Bestätigung.
+- Wort wählen: erster Buchstabe wählt das ältere Wort mit diesem Anfang, es bleibt gesperrt; jeder richtig getippte Buchstabe färbt sich um.
+- Verloren: Level wiederholen ohne Strafe, mit Analyse (welche Tasten die meisten Fehler brachten).
+- Punkte liegen als Konto pro Kapitel; später daraus Powerups für das nächste Level wählbar.
 - Spielprinzip (Idee des Erstellers): Spaß und Herausforderung. Ein Level endet über eine Energieleiste des Huhns: verpasste Wörter (Zeit) und Tippfehler kosten Energie; Energie 0 beendet das Level.
 - Ruhige Gestaltung für Kinder: kein Blitzen, Explosion als sanfte Funken, Ton standardmäßig aus (Rat der Skill-Doku).
 
