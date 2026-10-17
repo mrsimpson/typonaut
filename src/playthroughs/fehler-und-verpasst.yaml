@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=../../node_modules/@lernapps/app-templates/runtime/interactive/playthrough.v1.schema.json
 # Chapter 1, level 1: a wrong key takes 3 percent of the shield and ends the combo; the first letter picks the comet,
-# a wrong key after it counts again; the comet then arrives after 11 seconds and takes 16 percent (10 plus 2 per letter).
+# a wrong key after it counts again; the comet then arrives after 11 seconds and takes 11 percent (8 plus 1 per letter).
 route: de-1
 seed: 1
 steps:
@@ -12,5 +12,5 @@ steps:
   - keys: ["s", "x"]
     state: { errors: 2, shield: 94, target: 1 }
   - ticks: 560
-    state: { missed: 1, shield: 78, last: missed, target: 0 }
-    announce: "slk ist angekommen. Schild 78 Prozent."
+    state: { missed: 1, shield: 83, last: missed, target: 0 }
+    announce: "slk ist angekommen. Schild 83 Prozent."

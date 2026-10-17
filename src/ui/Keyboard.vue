@@ -3,7 +3,7 @@
 // level, the text above it says the same in words.
 import type { Layout } from "../core/course.ts";
 
-defineProps<{ layout: Layout; next: string; shiftKeys: string }>();
+defineProps<{ layout: Layout; next: string; shiftKeys: string; known: string; legend: string[] }>();
 
 const fingerClass = (layout: Layout, key: string): string => `f-${layout.fingers[key] ?? "none"}`;
 const baseOf = (layout: Layout, char: string): string => layout.shifted[char] ?? char.toLowerCase();
@@ -21,9 +21,15 @@ const baseOf = (layout: Layout, char: string): string => layout.shifted[char] ??
         v-for="key in row.split('')"
         :key="key"
         class="key"
-        :class="[fingerClass(layout, key), { next: key === baseOf(layout, next) }]"
+        :class="[fingerClass(layout, key), { next: key === baseOf(layout, next), unknown: !known.includes(key) }]"
         >{{ key }}</span
       >
+    </div>
+    <div class="legend">
+      <span class="chip f-lp">{{ legend[0] }}</span>
+      <span class="chip f-lr">{{ legend[1] }}</span>
+      <span class="chip f-lm">{{ legend[2] }}</span>
+      <span class="chip f-li">{{ legend[3] }}</span>
     </div>
     <div class="row space">
       <span class="key shift" :class="{ next: shiftKeys === 'l' }">⇧</span>
@@ -35,7 +41,7 @@ const baseOf = (layout: Layout, char: string): string => layout.shifted[char] ??
 
 <style scoped>
 .keyboard {
-  --k: min(1.5rem, calc((100vw - 5rem) / 13));
+  --k: min(2rem, calc((100vw - 5rem) / 13));
 
   display: inline-block;
   padding: 0.5rem;
@@ -89,6 +95,24 @@ const baseOf = (layout: Layout, char: string): string => layout.shifted[char] ??
 .f-li,
 .f-ri {
   background: #b9e3a1;
+}
+
+.unknown {
+  opacity: 0.35;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin: 0.3rem 0;
+}
+
+.chip {
+  padding: 0.05rem 0.4rem;
+  border-radius: 0.25rem;
+  color: #0d1330;
+  font-size: 0.75rem;
 }
 
 .next {

@@ -62,7 +62,7 @@ describe("the game", () => {
     const flight = state.comets[0]?.flight ?? 0;
     for (let time = 0; time < flight; time += 20) state = tick(state, 20);
     expect(state.missed).toBe(1);
-    expect(state.shield).toBe(100 - (10 + 2 * word.length));
+    expect(state.shield).toBe(100 - (8 + word.length));
     expect(state.last).toBe("missed");
   });
 
@@ -86,7 +86,9 @@ describe("the game", () => {
   test("keys that are no letters change nothing, and Escape leads back to the map", () => {
     const state = firstComet("de-1", 1);
     expect(press(state, "Shift")).toBe(state);
-    expect(press(state, " ")).toBe(state);
+    const space = press(state, " ");
+    expect(space).toEqual(state);
+    expect(space).not.toBe(state);
     expect(press(state, "Escape").phase).toBe("menu");
   });
 

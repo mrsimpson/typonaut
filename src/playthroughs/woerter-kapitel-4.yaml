@@ -26,14 +26,14 @@ steps:
     ticks: 40
     state: { spawned: 5 }
     announce: "Ei getroffen. Schild 100 Prozent."
-  - keys: ["K", "a", "j", "a", "k"]
+  - keys: ["D", "a", "s", "s"]
     ticks: 40
     state: { spawned: 6 }
-    announce: "Kajak getroffen. Schild 100 Prozent."
-  - keys: ["A", "l", "a", "s", "k", "a"]
+    announce: "Dass getroffen. Schild 100 Prozent."
+  - keys: ["J", "a"]
     ticks: 40
     state: { spawned: 7 }
-    announce: "Alaska getroffen. Schild 100 Prozent."
+    announce: "Ja getroffen. Schild 100 Prozent."
   - keys: ["E", "i", "s"]
     ticks: 40
     state: { spawned: 8 }
@@ -47,21 +47,5 @@ steps:
     state: { spawned: 10 }
     announce: "Lied getroffen. Schild 100 Prozent."
   - keys: ["G", "e", "i", "g", "e"]
-    ticks: 40
-    state: { spawned: 11 }
-    announce: "Geige getroffen. Schild 100 Prozent."
-  - keys: ["F", "l", "a", "g", "g", "e"]
-    ticks: 40
-    state: { spawned: 12 }
-    announce: "Flagge getroffen. Schild 100 Prozent."
-  - keys: ["E", "s", "s", "i", "g"]
-    ticks: 40
-    state: { spawned: 13 }
-    announce: "Essig getroffen. Schild 100 Prozent."
-  - keys: ["k", "a", "s", "a"]
-    ticks: 40
-    state: { spawned: 14 }
-    announce: "kasa getroffen. Schild 100 Prozent."
-  - keys: ["H", "a", "l", "l", "e"]
-    state: { phase: won, destroyed: 14, errors: 0, stars: 3, score: 1754, last: won }
-    announce: "Geschafft! 3 von 3 Sternen, 1.754 Sternenstaub."
+    state: { phase: won, destroyed: 10, errors: 0, stars: 3, score: 1060, last: won }
+    announce: "Geschafft! 3 von 3 Sternen, 1.060 Sternenstaub."

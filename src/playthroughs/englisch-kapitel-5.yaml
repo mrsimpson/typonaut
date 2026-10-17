@@ -26,42 +26,26 @@ steps:
     ticks: 40
     state: { spawned: 5 }
     announce: "read getroffen. Schild 100 Prozent."
-  - keys: ["H", "a", "i", "r"]
+  - keys: ["s", "l", "i", "d", "e"]
     ticks: 40
     state: { spawned: 6 }
-    announce: "Hair getroffen. Schild 100 Prozent."
-  - keys: ["U", "s"]
+    announce: "slide getroffen. Schild 100 Prozent."
+  - keys: ["l", "e", "g"]
     ticks: 40
     state: { spawned: 7 }
-    announce: "Us getroffen. Schild 100 Prozent."
-  - keys: ["L", "a", "d"]
+    announce: "leg getroffen. Schild 100 Prozent."
+  - keys: ["U", "s"]
     ticks: 40
     state: { spawned: 8 }
-    announce: "Lad getroffen. Schild 100 Prozent."
-  - keys: ["r", "e", "a", "d"]
+    announce: "Us getroffen. Schild 100 Prozent."
+  - keys: ["r", "e", "d"]
     ticks: 40
     state: { spawned: 9 }
-    announce: "read getroffen. Schild 100 Prozent."
-  - keys: ["h", "e", "r", "e"]
-    ticks: 40
-    state: { spawned: 10 }
-    announce: "here getroffen. Schild 100 Prozent."
-  - keys: ["h", "a", "i", "r"]
-    ticks: 40
-    state: { spawned: 11 }
-    announce: "hair getroffen. Schild 100 Prozent."
-  - keys: ["f", "a", "d", "s"]
-    ticks: 40
-    state: { spawned: 12 }
-    announce: "fads getroffen. Schild 100 Prozent."
-  - keys: ["u", "s"]
-    ticks: 40
-    state: { spawned: 13 }
-    announce: "us getroffen. Schild 100 Prozent."
+    announce: "red getroffen. Schild 100 Prozent."
   - keys: ["f", "i", "r", "e"]
     ticks: 40
-    state: { spawned: 14 }
+    state: { spawned: 10 }
     announce: "fire getroffen. Schild 100 Prozent."
-  - keys: ["u", "s", "e"]
-    state: { phase: won, destroyed: 14, errors: 0, stars: 3, score: 1204, last: won }
-    announce: "Geschafft! 3 von 3 Sternen, 1.204 Sternenstaub."
+  - keys: ["d", "r", "e", "s", "s"]
+    state: { phase: won, destroyed: 10, errors: 0, stars: 3, score: 784, last: won }
+    announce: "Geschafft! 3 von 3 Sternen, 784 Sternenstaub."

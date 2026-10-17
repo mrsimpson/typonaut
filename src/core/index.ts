@@ -58,6 +58,8 @@ export interface State {
   comets: Comet[];
   bursts: Burst[];
   nextId: number;
+  /** The words drawn in this level, in lower case: a word comes once, whatever its case. */
+  used: string[];
   /** The id of the comet being typed, 0 when none. */
   target: number;
   shield: number;
@@ -90,8 +92,8 @@ interface LevelSettings {
 
 export const LEVELS: Readonly<Record<1 | 2 | 3, LevelSettings>> = {
   1: { total: 10, maxActive: 1, gap: 1500, base: 8000, perLetter: 1000 },
-  2: { total: 14, maxActive: 2, gap: 3500, base: 7000, perLetter: 900 },
-  3: { total: 18, maxActive: 3, gap: 3000, base: 6000, perLetter: 800 },
+  2: { total: 10, maxActive: 2, gap: 5000, base: 9000, perLetter: 1200 },
+  3: { total: 14, maxActive: 3, gap: 4500, base: 8000, perLetter: 1100 },
 };
 
 /** The ship the comets fly to, in percent of the playing field. */
@@ -100,6 +102,19 @@ const MAX_SHIELD = 100;
 const ERROR_COST = 3;
 const HIT_GAIN = 4;
 const RESPAWN_PAUSE = 800;
+/** Keys that do nothing in a round and must not scroll the page. */
+const SWALLOWED = [
+  " ",
+  "ArrowUp",
+  "ArrowDown",
+  "ArrowLeft",
+  "ArrowRight",
+  "PageUp",
+  "PageDown",
+  "Home",
+  "End",
+  "Backspace",
+];
 /** How long a burst of stardust stays on the field, in milliseconds. */
 export const BURST_TIME = 900;
 
@@ -130,6 +145,7 @@ export function start(seed: number, route: string): State {
     comets: [],
     bursts: [],
     nextId: 1,
+    used: [],
     target: 0,
     shield: MAX_SHIELD,
     score: 0,
@@ -192,13 +208,14 @@ function nextWord(state: State): string {
 function wordForComet(state: State): string {
   for (let tries = 0; ; tries++) {
     const word = state.level === 1 ? sequence(state) : nextWord(state);
-    const taken = state.comets.some((comet) => comet.word[0] === word[0]);
-    if (!taken || tries >= 8) return word;
+    const taken = state.comets.some((comet) => comet.word[0] === word[0]) || state.used.includes(word.toLowerCase());
+    if (!taken || tries >= 20) return word;
   }
 }
 
 function spawn(state: State): void {
   const word = wordForComet(state);
+  state.used.push(word.toLowerCase());
   const settings = LEVELS[state.level];
   const ramp = 1 - 0.2 * (state.spawned / settings.total);
   const chapterFactor = 1 - 0.01 * (state.chapter - 1);
@@ -322,7 +339,10 @@ export function step(state: State, input: Input): State {
   if (state.phase === "play") {
     if (asks(input, "Escape", "menu"))
       return { ...start(state.seed, state.route), level: state.level, attempt: state.attempt };
-    if (input.kind !== "key" || input.key.length !== 1 || input.key === " ") return state;
+    if (input.kind !== "key") return state;
+    // keys that would scroll the page or leave the game: a new object makes the shell keep them from their default
+    if (SWALLOWED.includes(input.key)) return { ...state };
+    if (input.key.length !== 1) return state;
     return typeKey(state, input.key);
   }
   if (input.kind === "action" && input.name === "level") {
@@ -366,7 +386,7 @@ export function tick(state: State, dt: number): State {
     next.last = "missed";
     next.comets = next.comets.filter((other) => other.id !== comet.id);
     if (next.target === comet.id) next.target = 0;
-    damage(next, 10 + 2 * comet.word.length);
+    damage(next, 8 + comet.word.length);
     if (next.phase !== "play") return next;
   }
   const waited = next.time - next.lastSpawn;

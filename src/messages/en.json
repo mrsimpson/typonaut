@@ -5,7 +5,6 @@
   "chapterCapitals": "Capital letters",
   "course.de": "German with a German keyboard (QWERTZ)",
   "course.en": "English with an English keyboard (QWERTY)",
-  "otherCourse": "Choose the other course: German or English",
   "chapterTitle": "Chapter {chapter}: {keys}",
   "level1": "Level 1: Get to know the keys",
   "level2": "Level 2: Words",
@@ -47,5 +46,13 @@
   "missed": "{word} arrived. Shield {shield} percent.",
   "won": "Well done! {stars} of 3 stars, {score} stardust.",
   "lost": "The shield is empty. Try again?",
-  "startAnnounce": "Level {level} begins. Type the flying words."
+  "startAnnounce": "Level {level} begins. Type the flying words.",
+  "typing": "You are typing: {word}",
+  "starsInfo": "3 stars: no mistake and no comet missed. 2 stars: at least 9 of 10 keys right. 1 star: done.",
+  "switchTo.de": "Switch to the German course (German keyboard)",
+  "switchTo.en": "Switch to the English course (English keyboard)",
+  "legend.lp": "little finger",
+  "legend.lr": "ring finger",
+  "legend.lm": "middle finger",
+  "legend.li": "index finger"
 }

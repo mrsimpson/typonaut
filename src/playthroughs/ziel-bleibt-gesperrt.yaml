@@ -5,13 +5,13 @@ route: de-5
 seed: 1
 steps:
   - keys: ["3", "Enter"]
-    ticks: 190
+    ticks: 265
     state: { phase: play, level: 3, spawned: 2 }
     announce: "Level 3 beginnt. Tippe die fliegenden Wörter ab."
-  - keys: ["E"]
+  - keys: ["S"]
     state: { target: 2, errors: 0, last: pick }
   - keys: ["F"]
     state: { target: 2, errors: 1, combo: 0, last: wrong }
-  - keys: ["s", "e", "l"]
-    state: { target: 0, destroyed: 1, errors: 1, score: 50, last: destroyed }
-    announce: "Esel getroffen. Schild 100 Prozent."
+  - keys: ["a", "u", "e", "r"]
+    state: { target: 0, destroyed: 1, errors: 1, score: 100, last: destroyed }
+    announce: "Sauer getroffen. Schild 100 Prozent."

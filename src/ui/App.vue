@@ -2,7 +2,7 @@
 // The game: the map of the chapters and the levels, the field with the comets, the ship and its shield, and the result
 // with the analysis of what went wrong. The component only shows the state it gets and turns clicks into inputs; it
 // remembers the stars and the stardust on the device. It announces what happens for screen readers.
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { announce, prefersReducedMotion } from "@lernapps/tooling/a11y";
 import { translator, type Messages, type Params } from "@lernapps/tooling/i18n";
 import type { Input } from "@lernapps/app-templates/interactive";
@@ -21,10 +21,20 @@ const t = computed<(key: string, params?: Params) => string>(() =>
 
 const progress = ref<Progress>({});
 const reduced = ref(false);
+/** In a round Tab must not move the focus to a link: the shell gives no key to a focused link or button. */
+const keepFocusOut = (event: KeyboardEvent): void => {
+  if (props.state.phase === "play" && event.key === "Tab") event.preventDefault();
+};
 onMounted(() => {
   progress.value = loadProgress();
   reduced.value = prefersReducedMotion();
+  document.addEventListener("keydown", keepFocusOut);
 });
+onBeforeUnmount(() => document.removeEventListener("keydown", keepFocusOut));
+/** Moves the focus off the clicked button, so that the keys 1, 2, 3 and Enter reach the game again. */
+const release = (event: Event): void => {
+  if (event.currentTarget instanceof HTMLElement) event.currentTarget.blur();
+};
 
 const course = computed(() => COURSES[props.state.course]);
 const levels = [1, 2, 3] as const;
@@ -33,7 +43,10 @@ const chapterTitle = (chapter: number, keys: string): string =>
   chapter === 1 ? t.value("chapterHome") : chapter === 2 ? t.value("chapterCapitals") : keys.split("").join(" ");
 const dustOf = (route: string): number => progress.value[route]?.dust ?? 0;
 const start = (): void => emit("input", { kind: "action", name: "start" });
-const choose = (level: 1 | 2 | 3): void => emit("input", { kind: "action", name: "level", value: level });
+const choose = (level: 1 | 2 | 3, event: Event): void => {
+  emit("input", { kind: "action", name: "level", value: level });
+  release(event);
+};
 
 /** The key to type next: of the picked comet, else of the oldest one. */
 const aimChar = computed(() => {
@@ -51,6 +64,25 @@ const hint = computed(() => {
   const key = t.value("hint", { key: aimChar.value, finger: finger.value });
   return shiftSide.value === "" ? key : `${key} ${t.value("hintShift", { hand: t.value(`shift.${shiftSide.value}`) })}`;
 });
+
+/** The keys the chapter and the chapters before it introduced, as keys of the keyboard. */
+const knownKeys = computed(() =>
+  course.value.chapters
+    .slice(0, props.state.chapter)
+    .flatMap((chapter) => chapter.keys.toLowerCase().split(""))
+    .map((char) => course.value.layout.shifted[char] ?? char)
+    .join(""),
+);
+const legend = computed(() => ["lp", "lr", "lm", "li"].map((id) => t.value(`legend.${id}`)));
+const pickedWord = computed(() => props.state.comets.find((comet) => comet.id === props.state.target)?.word ?? "");
+/** Earlier places of a comet on its arc, to draw its tail. */
+const tail = (id: number): { x: number; y: number; n: number }[] => {
+  const comet = props.state.comets.find((other) => other.id === id);
+  if (comet === undefined) return [];
+  return [1, 2, 3, 4, 5]
+    .filter((n) => props.state.time - n * 160 >= comet.born)
+    .map((n) => ({ ...positionOf(comet, props.state.time - n * 160), n }));
+};
 
 const accuracy = computed(() => {
   const { right, errors } = props.state;
@@ -129,7 +161,9 @@ watch(
         </a>
       </nav>
       <p class="other">
-        <a :href="`#${state.course === 'de' ? 'en' : 'de'}-1`">{{ t("otherCourse") }}</a>
+        <a :href="`#${state.course === 'de' ? 'en' : 'de'}-1`">{{
+          t(`switchTo.${state.course === "de" ? "en" : "de"}`)
+        }}</a>
       </p>
       <h3>
         {{
@@ -147,7 +181,7 @@ watch(
           class="level"
           :class="{ chosen: level === state.level }"
           :aria-pressed="level === state.level"
-          @click="choose(level)"
+          @click="choose(level, $event)"
         >
           {{ t(`level${level}`) }}
           <span class="stars">{{ "★".repeat(starsOf(progress, state.route, level)) }}</span>
@@ -163,7 +197,15 @@ watch(
         <span>{{ t("where", { chapter: state.chapter, level: state.level }) }}</span>
         <span>{{ t("score", { score: state.score }) }} · {{ t("combo", { combo: state.combo }) }}</span>
       </div>
-      <div class="field" aria-hidden="true">
+      <div class="field" :class="{ hurt: state.last === 'missed' && !reduced }" aria-hidden="true">
+        <template v-for="comet in state.comets" :key="`tail-${comet.id}`">
+          <span
+            v-for="dot in tail(comet.id)"
+            :key="dot.n"
+            class="dot"
+            :style="{ left: `${dot.x}%`, top: `${dot.y}%`, opacity: 0.6 - dot.n * 0.1 }"
+          ></span>
+        </template>
         <span
           v-for="comet in state.comets"
           :key="comet.id"
@@ -186,14 +228,26 @@ watch(
           :style="{ left: `${burst.x}%`, top: `${burst.y}%` }"
           >✦ +{{ burst.points }}</span
         >
-        <span class="ship" :style="ship">▲</span>
+        <svg class="ship" :style="ship" viewBox="0 0 24 32" width="28" height="38">
+          <path d="M12 1 L21 24 L12 19 L3 24 Z" fill="#e8ecff" />
+          <circle cx="12" cy="12" r="3" fill="#6c7bd9" />
+          <path d="M9 22 L12 30 L15 22 Z" fill="#ffd166" />
+        </svg>
       </div>
       <div class="shield" aria-hidden="true">
         <div class="bar"><div class="fill" :style="{ width: `${state.shield}%` }"></div></div>
         <span>{{ t("shield", { shield: state.shield }) }}</span>
       </div>
+      <p v-if="pickedWord !== ''" class="picked-word" aria-hidden="true">{{ t("typing", { word: pickedWord }) }}</p>
       <p v-if="state.level < 3" class="hint" aria-hidden="true">{{ hint }}</p>
-      <Keyboard v-if="state.level === 1" :layout="course.layout" :next="aimChar" :shift-keys="shiftSide" />
+      <Keyboard
+        v-if="state.level === 1"
+        :layout="course.layout"
+        :next="aimChar"
+        :shift-keys="shiftSide"
+        :known="knownKeys"
+        :legend="legend"
+      />
       <p class="small">{{ t("escape") }}</p>
     </template>
 
@@ -201,6 +255,7 @@ watch(
       <h2 class="result">{{ t(state.phase === "won" ? "wonTitle" : "lostTitle") }}</h2>
       <p v-if="state.phase === 'lost'">{{ t("lostText") }}</p>
       <p v-else class="stars big">{{ "★".repeat(state.stars) }}{{ "☆".repeat(3 - state.stars) }}</p>
+      <p v-if="state.phase === 'won'" class="small">{{ t("starsInfo") }}</p>
       <p>
         {{ t("summary", { destroyed: state.destroyed, total: state.total, accuracy, score: state.score }) }}
       </p>
@@ -335,7 +390,11 @@ button[aria-pressed="true"] {
   height: 22rem;
   margin: 0.5rem 0;
   border-radius: 0.5rem;
-  background: #0a0f28;
+  background:
+    radial-gradient(circle at 15% 20%, #ffffff 0, #ffffff 1px, transparent 2px),
+    radial-gradient(circle at 70% 12%, #ffffff 0, #ffffff 1px, transparent 2px),
+    radial-gradient(circle at 85% 60%, #ffffff 0, #ffffff 1px, transparent 2px),
+    radial-gradient(circle at 35% 75%, #ffffff 0, #ffffff 1px, transparent 2px), #0a0f28;
   overflow: hidden;
 }
 
@@ -352,7 +411,33 @@ button[aria-pressed="true"] {
 }
 
 .comet.picked {
+  outline: 2px solid #ffd166;
   background: #3a4585;
+}
+
+.dot {
+  position: absolute;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: #8f9bdc;
+  transform: translate(-50%, -50%);
+}
+
+.picked-word {
+  margin: 0.4rem 0;
+  color: #ffd166;
+  font-weight: 600;
+}
+
+.field.hurt {
+  animation: hurt 0.8s ease-out;
+}
+
+@keyframes hurt {
+  from {
+    box-shadow: inset 0 0 2rem #b04a5a;
+  }
 }
 
 .comet .done {

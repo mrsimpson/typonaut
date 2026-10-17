@@ -5,7 +5,6 @@
   "chapterCapitals": "Großbuchstaben",
   "course.de": "Deutsch mit deutscher Tastatur (QWERTZ)",
   "course.en": "Englisch mit englischer Tastatur (QWERTY)",
-  "otherCourse": "Anderen Kurs wählen: Deutsch oder Englisch",
   "chapterTitle": "Kapitel {chapter}: {keys}",
   "level1": "Level 1: Tasten kennenlernen",
   "level2": "Level 2: Wörter",
@@ -48,5 +47,13 @@
   "won": "Geschafft! {stars} von 3 Sternen, {score} Sternenstaub.",
   "lost": "Das Schild ist leer. Nochmal versuchen?",
   "begin": "Los geht's",
-  "startAnnounce": "Level {level} beginnt. Tippe die fliegenden Wörter ab."
+  "startAnnounce": "Level {level} beginnt. Tippe die fliegenden Wörter ab.",
+  "typing": "Du tippst gerade: {word}",
+  "starsInfo": "3 Sterne: kein Fehler und kein Komet verpasst. 2 Sterne: mindestens 9 von 10 Tasten richtig. 1 Stern: geschafft.",
+  "switchTo.de": "Zum deutschen Kurs wechseln (deutsche Tastatur)",
+  "switchTo.en": "Zum englischen Kurs wechseln (englische Tastatur)",
+  "legend.lp": "kleiner Finger",
+  "legend.lr": "Ringfinger",
+  "legend.lm": "Mittelfinger",
+  "legend.li": "Zeigefinger"
 }
