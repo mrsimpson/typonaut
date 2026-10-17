@@ -4,12 +4,12 @@
 # archetype: the kind of app, chosen at the end of Explore: explainer, interactive or quiz. null until then.
 archetype: interactive
 # phase: the phase you work in now: explore, plan, code or commit. Change it when you enter the next phase.
-phase: explore
+phase: plan
 # prePushFailures: failed runs of the pre-push hook. The hook counts them. Never change this value.
 prePushFailures: 0
 ---
 
-# Plan: Tipp-Huhn, first version
+# Plan: Typonaut, first version
 
 <!--
 This file guides you, the assistant, through the first version of an app, and shows the creator where you are.
@@ -32,7 +32,7 @@ This file guides you, the assistant, through the first version of an app, and sh
 
 ## Goal
 
-<!-- One or two sentences: what learners do in the app, and what they learn or train by it. Fill it in Explore. -->
+Kinder (ab Klasse 3 und darüber hinaus, ohne Vorwissen) lernen in einer Weltraumreise das Zehnfingersystem: Wörter fliegen als Kometen in Bögen über den Bildschirm und werden abgetippt, bevor sie das Raumschiff treffen. Kapitel für Kapitel kommen neue Tasten dazu, in Deutsch (QWERTZ) und Englisch (QWERTY). Sie trainieren, die richtigen Finger zu nutzen, ohne auf die Tastatur zu schauen.
 
 ## Key decisions
 
@@ -48,7 +48,7 @@ Mark a choice you made without asking the creator with "(guess)", and list it in
 - Oberfläche, Übungswörter und Layout in Deutsch und Englisch (Wunsch des Erstellers); Deutsch kommt zuerst, jede Sprache ist vollständig (interactive-app-valid).
 - Nur mit Hardware-Tastatur gedacht, nicht fürs Handy; das und der Zeitdruck kommen als "limits" in den Eintrag (guess).
 - Thema Huhn entfällt (Moorhuhn kennt die Zielgruppe nicht). Thema bestätigt: Weltraumreise, Wörter als Kometen mit Schweif, Energie = Schutzschild, Sternenstaub als Punktekonto pro Kapitel (Kapitel = Planeten/Stationen).
-- Name der App: wird noch bestimmt (offen). Der Ersteller benennt das Repo vor der Veröffentlichung um; die Adresse im Eintrag (`url`, `source`) ist bis dahin vorläufig und wird mit dem neuen Repo-Namen ersetzt, bevor der Eintrag gelistet wird. Der Titel im Eintrag und in der App folgt dem Namen.
+- Name der App: Typonaut (vom Ersteller bestimmt). Der Ersteller benennt das Repo vor der Veröffentlichung in `typonaut` um; die Adresse im Eintrag (`url`, `source`) ist bis dahin vorläufig.
 - Wort wählen: erster Buchstabe wählt das ältere Wort mit diesem Anfang, es bleibt gesperrt; jeder richtig getippte Buchstabe färbt sich um.
 - Verloren: Level wiederholen ohne Strafe, mit Analyse (welche Tasten die meisten Fehler brachten).
 - Punkte liegen als Konto pro Kapitel; später daraus Powerups für das nächste Level wählbar.
@@ -123,7 +123,7 @@ from earlier answers. Write each answer under "Answers".
 - [ ] **Checkpoint:** research. Explain to the creator, in plain words, what you found and how: the curriculum
       orientation, the competencies by chapter, the sources and how you checked them, what you could not check, and
       the archetype with its reason. Stop and wait for the creator. Change it if they ask, then ask again.
-- [ ] Set `phase: plan`.
+- [x] Set `phase: plan`.
 
 ### Answers
 
@@ -145,7 +145,7 @@ what is not known yet, such as the app's address before it is published. The lis
 -->
 
 ```yaml
-title: Tipp-Huhn
+title: Typonaut
 subject:
   de: Informatik
   en: Computer Science
@@ -159,10 +159,10 @@ summary:
     Learn touch typing step by step, from the home row to the whole keyboard. Words fly across
     the screen in an arc; type them correctly and they burst and score points. With a German or
     an English keyboard.
-url: https://mrsimpson.github.io/tipp-huhn/
+url: https://mrsimpson.github.io/typonaut/
 creator:
   name: mrsimpson
-source: https://github.com/mrsimpson/tipp-huhn
+source: https://github.com/mrsimpson/typonaut
 keywords: [Zehnfingersystem, Tastaturschreiben, Tippen lernen, Schreibtraining, Tastatur, Spiel]
 limits: >-
   Nicht für Screenreader und nicht für das Handy gedacht: Die App braucht eine Tastatur,
@@ -185,13 +185,13 @@ creator's turns from here to the listing are counted in the retrospective (targe
 
 ### Tasks
 
-- [ ] Write the tasks of Code under "Code": the pages or screens, the content, and what each must show. Each task
+- [x] Write the tasks of Code under "Code": the pages or screens, the content, and what each must show. Each task
       ends in a commit.
-- [ ] Write the content method under "Content method": load the skill of the archetype and the skill
+- [x] Write the content method under "Content method": load the skill of the archetype and the skill
       `lernapps-exercise-patterns`, and decide with them how you will make the content.
-- [ ] Show the creator the goal, the competencies by chapter, the entry draft and the tasks, short. Explain the
+- [x] Show the creator the goal, the competencies by chapter, the entry draft and the tasks, short. Explain the
       content method in plain words: what learners will see and do, and what it cannot do.
-- [ ] For every component and interactive exercise, show a sketch: a static SVG or image of what learners see, or
+- [x] For every component and interactive exercise, show a sketch: a static SVG or image of what learners see, or
       the steps (what they do, what they see after each). A description in words alone is not enough.
 - [ ] **Checkpoint:** confirm the plan and the content method. Stop and wait for the creator. Change the plan if they
       ask, then ask again.
@@ -199,11 +199,25 @@ creator's turns from here to the listing are counted in the retrospective (targe
 
 ### Content method
 
-<!--
-How you will make the content, one line each, so the creator can judge it: the exercise patterns and where each is
-used; the figures and how they are made; data files for material used more than once; each component, what it
-checks and what it cannot; how a later agent adds a chapter. In Code, it becomes the content guide.
--->
+Spielregeln (Kern, `src/core/`, rein und deterministisch; Sketches: `sketches/spiel.svg`, `sketches/ergebnis.svg`):
+- Ein Kurs ist eine Sprache mit ihrem Layout: Deutsch/QWERTZ oder Englisch/QWERTY. Die Wörter und die Tasten eines Kurses gehören zusammen. Die Oberfläche ist unabhängig davon auf Deutsch oder Englisch.
+- Ein Kapitel führt ein bis zwei neue Tasten ein (mit Großbuchstaben, siehe unten); es hat drei Level: 1 Einführung (nur Zeichenfolgen der neuen Tasten, Tastaturhilfe mit Finger), 2 Wörter (neue und alte Tasten, Hilfe nur für die nächste Taste), 3 Mix und Wiederholung (ohne Hilfe, mehr Kometen gleichzeitig).
+- Kometen starten außerhalb des Bildes und fliegen auf einer Parabel (Bahn aus Startpunkt, Zeit und Seed) zum Raumschiff. Der erste getippte Buchstabe wählt den ältesten Kometen mit diesem Anfangsbuchstaben; er bleibt gesperrt, bis er fertig ist. Jeder richtige Buchstabe färbt den Schweif um. Ein falscher Buchstabe zählt als Fehler, das Wort wackelt sanft.
+- Schild (Energie): 100 %. Ein Komet, der das Schiff erreicht, kostet je nach Wortlänge; ein Fehler kostet weniger und setzt die Kombo zurück; ein getroffener Komet gibt etwas zurück. Bei 0 ist das Level verloren, Wiederholen ohne Strafe.
+- Punkte (Sternenstaub): Basis je Buchstabe, Faktor für neue Tasten und Großbuchstaben, Kombo-Faktor. Schwierige Wörter geben mehr. Der Staub liegt auf einem Konto je Kapitel (`createStorage`, klein). Powerups aus dem Konto sind nicht Teil der ersten Version.
+- Sterne nach Genauigkeit (1 = geschafft, 3 = fast fehlerfrei); ein Stern schaltet das nächste Level frei.
+- Analyse bei Niederlage und Sieg: Fehler und verpasste Wörter je Taste, mit dem häufigsten Vertipper und dem zugehörigen Finger.
+- Tempo: am Anfang bewusst langsam (Genauigkeit vor Tempo, Schwyzer Leitfaden); es steigt innerhalb eines Levels leicht.
+- Ruhig: kein Blitzen, Ton aus, bei reduzierter Bewegung kein Wackeln und kürzere Effekte.
+
+Kursdaten (`src/data/`, eine Datei je Kurs, ohne Code zu ändern erweiterbar):
+- Layout: Taste, Reihe, Finger (und Umschaltung mit der Gegenhand). Quelle der Fingerzuordnung: ein Belegungsplan (DIN 2137 für QWERTZ): vor dem Schreiben prüfen; was nicht belegt werden kann, steht unter "nicht geprüft".
+- Kapitel (Deutsch): 1 asdf jklö; 2 Großbuchstaben; 3 g h; 4 e i; 5 r u; 6 t z; 7 w o; 8 q p; 9 b n; 10 v m; 11 c x , .; 12 y ä ü ß ?.
+- Kapitel (Englisch): 1 asdf jkl;; 2 Großbuchstaben; 3 g h; 4 e i; 5 r u; 6 t y; 7 w o; 8 q p; 9 b n; 10 v m; 11 c x , .; 12 z ' ? -.
+- Wörter: ich schreibe sie selbst, kindgerecht und je Kurs; je Wort Schwierigkeit (Länge, neue Tasten, Großbuchstaben). Ein Datentest lehnt jedes Wort ab, das eine Taste außerhalb der bis zum Kapitel freigeschalteten benutzt.
+- Ein späterer Agent fügt ein Kapitel oder eine Sprache hinzu, indem er nur Daten ergänzt und die Playthroughs ausführt.
+
+Grenzen: keine Gesten, kein Handy; Zeitdruck; nicht für Screenreader (im Eintrag unter limits). Die didaktische Reihenfolge folgt der Schulpraxis (Schwyzer Leitfaden), nicht einem Wirkungsnachweis.
 
 ### Completed
 
@@ -234,7 +248,15 @@ one of them, stop and ask the creator to allow it, then run the command again. N
       instructions, as its comments show (the skill `lernapps-exercise-patterns` helps with its patterns). Commit it.
       Whenever a content decision changes later, update it in the same commit: this plan records the run, the guide
       stays for the agents after you.
-- [ ] <the tasks written in Plan>
+- [ ] Layouts: `src/data/` mit Layout und Fingerzuordnung für QWERTZ und QWERTY, mit Quelle; Datentest. Commit.
+- [ ] Kern: Kometenbahnen (Parabel, deterministisch aus Seed), Auswahl und Sperre des Wortes, Treffer, Fehler, Schild, Punkte mit Kombo, Level gewonnen/verloren, Fehlerstatistik je Taste. Dazu Playthroughs: Wort wählen und tippen; falsche Taste; Komet erreicht das Schiff; Level verloren; gleicher Seed, gleicher Ablauf. Commit.
+- [ ] Kursdaten Deutsch, Kapitel 1 bis 12, mit Wörtern und Datentest. Commit je Kapitelgruppe.
+- [ ] Kursdaten Englisch, Kapitel 1 bis 12, mit Wörtern und Datentest. Commit je Kapitelgruppe.
+- [ ] Oberfläche: Karte der Reise (Kapitel, Level, Sterne, Konto), Spielbildschirm nach `sketches/spiel.svg` (Schweif färbt sich, Tastaturhilfe nur in Level 1 und 2), Ergebnis und Analyse nach `sketches/ergebnis.svg`; Kurs- und Sprachwahl; alles per Tastatur bedienbar; Ansagen über `announce`. Commit.
+- [ ] Texte Deutsch und Englisch in `src/messages/` vollständig; `app.yaml` mit Anleitung, Kompetenzen, Routen. Commit.
+- [ ] Speichern: Sterne und Sternenstaub je Kapitel mit `createStorage`, unter 100 kB. Commit.
+- [ ] Ruhe und Bewegung: `prefersReducedMotion`, kein Blitzen, Ton aus. Commit.
+- [ ] Architektur in `docs/arc42/` mit jedem Teil. In jedem Commit mit Code.
 - [ ] `npx lernapps check` passes.
 - [ ] Set `phase: commit`.
 
