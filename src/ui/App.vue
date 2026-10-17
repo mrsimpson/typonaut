@@ -51,6 +51,29 @@ const bestStars = (chapter: number): number =>
   Math.max(...(progress.value[routeOf(props.state.course, chapter)]?.stars ?? [0]));
 const dustOf = (route: string): number => progress.value[route]?.dust ?? 0;
 const start = (): void => emit("input", { kind: "action", name: "start" });
+const pick = (chapter: number, event: Event): void => {
+  emit("input", { kind: "action", name: "chapter", value: chapter });
+  release(event);
+};
+/** The start page of the app in the language of this page, and this page in the other language. */
+const startPage = computed(() => "../");
+const otherLanguage = computed(() => ({
+  lang: props.lang === "en" ? "de" : "en",
+  href: `${props.lang === "en" ? "../../app/" : "../en/app/"}#${props.state.course}`,
+}));
+const canFullscreen = ref(false);
+let switchFullscreen: () => void = () => undefined;
+onMounted(() => {
+  canFullscreen.value = document.fullscreenEnabled;
+  switchFullscreen = () => {
+    if (document.fullscreenElement !== null) void document.exitFullscreen();
+    else void document.documentElement.requestFullscreen().catch(() => undefined);
+  };
+});
+const toggleFullscreen = (event: Event): void => {
+  release(event);
+  switchFullscreen();
+};
 const choose = (level: 1 | 2 | 3, event: Event): void => {
   emit("input", { kind: "action", name: "level", value: level });
   release(event);
@@ -127,7 +150,15 @@ const cometStyle = (id: number): Record<string, string> => {
 };
 
 watch(
-  () => [props.state.phase, props.state.last, props.state.destroyed, props.state.missed, props.state.level] as const,
+  () =>
+    [
+      props.state.phase,
+      props.state.last,
+      props.state.destroyed,
+      props.state.missed,
+      props.state.level,
+      props.state.chapter,
+    ] as const,
   () => {
     const { state } = props;
     const params = {
@@ -139,10 +170,12 @@ watch(
       score: state.score,
     };
     if (state.phase === "won" || state.phase === "lost") {
-      progress.value = saveResult(state.route, state.level, state.stars, state.score);
+      progress.value = saveResult(routeOf(state.course, state.chapter), state.level, state.stars, state.score);
       announce(t.value(state.phase, params));
-    } else if (["menu", "level", "start", "destroyed", "missed"].includes(state.last)) {
-      announce(t.value(state.last === "start" ? "startAnnounce" : state.last, params));
+    } else if (["menu", "level", "chapter", "start", "destroyed", "missed"].includes(state.last)) {
+      announce(
+        t.value(state.last === "start" ? "startAnnounce" : state.last === "chapter" ? "menu" : state.last, params),
+      );
     }
   },
 );
@@ -150,151 +183,164 @@ watch(
 
 <template>
   <section class="game" :aria-label="t('game')">
-    <template v-if="state.phase === 'menu'">
-      <header class="marquee">
-        <h2 class="logo">TYPONAUT</h2>
-        <p class="tagline">{{ t(`course.${state.course}`) }}</p>
-        <a class="switch" :href="`#${state.course === 'de' ? 'en' : 'de'}-1`">{{
-          t(`switchTo.${state.course === "de" ? "en" : "de"}`)
-        }}</a>
-      </header>
+    <div class="screen">
+      <template v-if="state.phase === 'menu'">
+        <header class="marquee">
+          <h2 class="logo">TYPONAUT</h2>
+          <p class="tagline">{{ t(`course.${state.course}`) }}</p>
+          <a class="switch" :href="`#${state.course === 'de' ? 'en' : 'de'}`">{{
+            t(`switchTo.${state.course === "de" ? "en" : "de"}`)
+          }}</a>
+        </header>
 
-      <nav class="planets" :aria-label="t('chapters')">
-        <a
-          v-for="chapter in course.chapters"
-          :key="chapter.id"
-          class="planet"
-          :href="`#${routeOf(state.course, chapter.id)}`"
-          :aria-current="chapter.id === state.chapter ? 'true' : undefined"
-          :style="{ '--hue': `${(chapter.id * 47) % 360}` }"
-        >
-          <span class="globe">{{ chapter.id }}</span>
-          <span class="stars" :aria-label="t('stars', { n: bestStars(chapter.id) })">{{
-            "★".repeat(bestStars(chapter.id)) || "·"
-          }}</span>
-        </a>
-      </nav>
+        <nav class="planets" :aria-label="t('chapters')">
+          <button
+            v-for="chapter in course.chapters"
+            :key="chapter.id"
+            type="button"
+            class="planet"
+            :aria-current="chapter.id === state.chapter ? 'true' : undefined"
+            :style="{ '--hue': `${(chapter.id * 47) % 360}` }"
+            @click="pick(chapter.id, $event)"
+          >
+            <span class="globe">{{ chapter.id }}</span>
+            <span class="stars" :aria-label="t('stars', { n: bestStars(chapter.id) })">{{
+              "★".repeat(bestStars(chapter.id)) || "·"
+            }}</span>
+            <span class="sr-only">{{ t("chapter", { chapter: chapter.id }) }}</span>
+          </button>
+        </nav>
 
-      <section class="briefing" :aria-label="t('chapterTitle', { chapter: state.chapter, keys: keysTitle })">
-        <p class="stage">{{ t("chapter", { chapter: state.chapter }) }}</p>
-        <p class="keycaps" aria-hidden="true">
-          <span v-for="(key, index) in newKeys" :key="index" class="cap">{{ key }}</span>
-        </p>
-        <p v-if="state.chapter < 3" class="keys-title">{{ keysTitle }}</p>
-        <p class="record">{{ t("record", { dust: dustOf(state.route) }) }}</p>
-      </section>
+        <section class="briefing" :aria-label="t('chapterTitle', { chapter: state.chapter, keys: keysTitle })">
+          <p class="stage">{{ t("chapter", { chapter: state.chapter }) }}</p>
+          <p class="keycaps" aria-hidden="true">
+            <span v-for="(key, index) in newKeys" :key="index" class="cap">{{ key }}</span>
+          </p>
+          <p v-if="state.chapter < 3" class="keys-title">{{ keysTitle }}</p>
+          <p class="record">{{ t("record", { dust: dustOf(routeOf(state.course, state.chapter)) }) }}</p>
+        </section>
 
-      <div class="stages" role="group" :aria-label="t('levels')">
-        <button
-          v-for="level in levels"
-          :key="level"
-          type="button"
-          class="stage-button"
-          :class="{ chosen: level === state.level }"
-          :aria-pressed="level === state.level"
-          @click="choose(level, $event)"
-        >
-          <span class="stage-number">{{ level }}</span>
-          <span class="stage-name">{{ t(`level${level}`) }}</span>
-          <span class="stars">{{ "★".repeat(starsOf(progress, state.route, level)) || "☆☆☆" }}</span>
-        </button>
-      </div>
-      <p class="info">{{ t("levelInfo", { words: LEVELS[state.level].total }) }}</p>
-      <button type="button" class="start" @click="start">{{ t("startButton") }}</button>
-      <p class="small">{{ t("keysHelp") }}</p>
-    </template>
-
-    <template v-else-if="state.phase === 'play'">
-      <div class="hud" aria-hidden="true">
-        <span>{{ t("where", { chapter: state.chapter, level: state.level }) }}</span>
-        <span>{{ t("score", { score: state.score }) }} · {{ t("combo", { combo: state.combo }) }}</span>
-      </div>
-      <div class="field" :class="{ hurt: state.last === 'missed' && !reduced }" aria-hidden="true">
-        <template v-for="comet in state.comets" :key="`tail-${comet.id}`">
-          <span
-            v-for="dot in tail(comet.id)"
-            :key="dot.n"
-            class="dot"
-            :style="{ left: `${dot.x}%`, top: `${dot.y}%`, opacity: 0.6 - dot.n * 0.1 }"
-          ></span>
-        </template>
-        <span
-          v-for="comet in state.comets"
-          :key="comet.id"
-          class="comet"
-          :class="{
-            picked: comet.id === state.target,
-            wrong: comet.id === state.target && state.last === 'wrong' && !reduced,
-          }"
-          :style="cometStyle(comet.id)"
-        >
-          <span v-for="(char, index) in comet.word.split('')" :key="index" :class="{ done: index < comet.typed }">{{
-            char
-          }}</span>
-        </span>
-        <span
-          v-for="burst in state.bursts"
-          :key="burst.id"
-          class="burst"
-          :class="{ still: reduced }"
-          :style="{ left: `${burst.x}%`, top: `${burst.y}%` }"
-          >✦ +{{ burst.points }}</span
-        >
-        <svg class="ship" :style="ship" viewBox="0 0 24 32" width="28" height="38">
-          <path d="M12 1 L21 24 L12 19 L3 24 Z" fill="#e8ecff" />
-          <circle cx="12" cy="12" r="3" fill="#6c7bd9" />
-          <path d="M9 22 L12 30 L15 22 Z" fill="#ffd166" />
-        </svg>
-      </div>
-      <div class="shield" aria-hidden="true">
-        <div class="bar"><div class="fill" :style="{ width: `${state.shield}%` }"></div></div>
-        <span>{{ t("shield", { shield: state.shield }) }}</span>
-      </div>
-      <p v-if="pickedWord !== ''" class="picked-word" aria-hidden="true">{{ t("typing", { word: pickedWord }) }}</p>
-      <p v-if="state.level < 3" class="hint" aria-hidden="true">{{ hint }}</p>
-      <Keyboard
-        v-if="state.level === 1"
-        :layout="course.layout"
-        :next="aimChar"
-        :shift-keys="shiftSide"
-        :known="knownKeys"
-        :legend="legend"
-      />
-      <p class="small">{{ t("escape") }}</p>
-    </template>
-
-    <template v-else>
-      <h2 class="result">{{ t(state.phase === "won" ? "wonTitle" : "lostTitle") }}</h2>
-      <p v-if="state.phase === 'lost'">{{ t("lostText") }}</p>
-      <p v-else class="stars big">{{ "★".repeat(state.stars) }}{{ "☆".repeat(3 - state.stars) }}</p>
-      <p v-if="state.phase === 'won'" class="small">{{ t("starsInfo") }}</p>
-      <p>
-        {{ t("summary", { destroyed: state.destroyed, total: state.total, accuracy, score: state.score }) }}
-      </p>
-      <template v-if="trouble.length > 0">
-        <h3>{{ t("troubleTitle") }}</h3>
-        <ul class="trouble">
-          <li v-for="entry in trouble" :key="entry.key">
-            <span class="char">{{ entry.key }}</span>
-            <span>{{ entry.text }} {{ entry.instead }} {{ entry.finger }}</span>
-          </li>
-        </ul>
+        <div class="stages" role="group" :aria-label="t('levels')">
+          <button
+            v-for="level in levels"
+            :key="level"
+            type="button"
+            class="stage-button"
+            :class="{ chosen: level === state.level }"
+            :aria-pressed="level === state.level"
+            @click="choose(level, $event)"
+          >
+            <span class="stage-number">{{ level }}</span>
+            <span class="stage-name">{{ t(`level${level}`) }}</span>
+            <span class="stars">{{
+              "★".repeat(starsOf(progress, routeOf(state.course, state.chapter), level)) || "☆☆☆"
+            }}</span>
+          </button>
+        </div>
+        <p class="info">{{ t("levelInfo", { words: LEVELS[state.level].total }) }}</p>
+        <button type="button" class="start" @click="start">{{ t("startButton") }}</button>
+        <p class="small">{{ t("keysHelp") }}</p>
+        <nav class="meta" :aria-label="t('more')">
+          <a :href="startPage">{{ t("info") }}</a>
+          <a :href="otherLanguage.href" :lang="otherLanguage.lang">{{ t(`uiLanguage.${otherLanguage.lang}`) }}</a>
+          <button v-if="canFullscreen" type="button" class="link" @click="toggleFullscreen">
+            {{ t("fullscreen") }}
+          </button>
+        </nav>
       </template>
-      <p v-else>{{ t("noTrouble") }}</p>
-      <div class="buttons">
-        <button type="button" class="primary" @click="emit('input', { kind: 'action', name: 'again' })">
-          {{ t("again") }}
-        </button>
-        <button
-          v-if="state.phase === 'won' && state.level < 3"
-          type="button"
-          @click="emit('input', { kind: 'action', name: 'next' })"
-        >
-          {{ t("next") }}
-        </button>
-        <button type="button" @click="emit('input', { kind: 'action', name: 'menu' })">{{ t("map") }}</button>
-      </div>
-    </template>
+
+      <template v-else-if="state.phase === 'play'">
+        <div class="hud" aria-hidden="true">
+          <span>{{ t("where", { chapter: state.chapter, level: state.level }) }}</span>
+          <span>{{ t("score", { score: state.score }) }} · {{ t("combo", { combo: state.combo }) }}</span>
+        </div>
+        <div class="field" :class="{ hurt: state.last === 'missed' && !reduced }" aria-hidden="true">
+          <template v-for="comet in state.comets" :key="`tail-${comet.id}`">
+            <span
+              v-for="dot in tail(comet.id)"
+              :key="dot.n"
+              class="dot"
+              :style="{ left: `${dot.x}%`, top: `${dot.y}%`, opacity: 0.6 - dot.n * 0.1 }"
+            ></span>
+          </template>
+          <span
+            v-for="comet in state.comets"
+            :key="comet.id"
+            class="comet"
+            :class="{
+              picked: comet.id === state.target,
+              wrong: comet.id === state.target && state.last === 'wrong' && !reduced,
+            }"
+            :style="cometStyle(comet.id)"
+          >
+            <span v-for="(char, index) in comet.word.split('')" :key="index" :class="{ done: index < comet.typed }">{{
+              char
+            }}</span>
+          </span>
+          <span
+            v-for="burst in state.bursts"
+            :key="burst.id"
+            class="burst"
+            :class="{ still: reduced }"
+            :style="{ left: `${burst.x}%`, top: `${burst.y}%` }"
+            >✦ +{{ burst.points }}</span
+          >
+          <svg class="ship" :style="ship" viewBox="0 0 24 32" width="28" height="38">
+            <path d="M12 1 L21 24 L12 19 L3 24 Z" fill="#e8ecff" />
+            <circle cx="12" cy="12" r="3" fill="#6c7bd9" />
+            <path d="M9 22 L12 30 L15 22 Z" fill="#ffd166" />
+          </svg>
+        </div>
+        <div class="shield" aria-hidden="true">
+          <div class="bar"><div class="fill" :style="{ width: `${state.shield}%` }"></div></div>
+          <span>{{ t("shield", { shield: state.shield }) }}</span>
+        </div>
+        <p v-if="pickedWord !== ''" class="picked-word" aria-hidden="true">{{ t("typing", { word: pickedWord }) }}</p>
+        <p v-if="state.level < 3" class="hint" aria-hidden="true">{{ hint }}</p>
+        <Keyboard
+          v-if="state.level === 1"
+          :layout="course.layout"
+          :next="aimChar"
+          :shift-keys="shiftSide"
+          :known="knownKeys"
+          :legend="legend"
+        />
+        <p class="small">{{ t("escape") }}</p>
+      </template>
+
+      <template v-else>
+        <h2 class="result">{{ t(state.phase === "won" ? "wonTitle" : "lostTitle") }}</h2>
+        <p v-if="state.phase === 'lost'">{{ t("lostText") }}</p>
+        <p v-else class="stars big">{{ "★".repeat(state.stars) }}{{ "☆".repeat(3 - state.stars) }}</p>
+        <p v-if="state.phase === 'won'" class="small">{{ t("starsInfo") }}</p>
+        <p>
+          {{ t("summary", { destroyed: state.destroyed, total: state.total, accuracy, score: state.score }) }}
+        </p>
+        <template v-if="trouble.length > 0">
+          <h3>{{ t("troubleTitle") }}</h3>
+          <ul class="trouble">
+            <li v-for="entry in trouble" :key="entry.key">
+              <span class="char">{{ entry.key }}</span>
+              <span>{{ entry.text }} {{ entry.instead }} {{ entry.finger }}</span>
+            </li>
+          </ul>
+        </template>
+        <p v-else>{{ t("noTrouble") }}</p>
+        <div class="buttons">
+          <button type="button" class="primary" @click="emit('input', { kind: 'action', name: 'again' })">
+            {{ t("again") }}
+          </button>
+          <button
+            v-if="state.phase === 'won' && state.level < 3"
+            type="button"
+            @click="emit('input', { kind: 'action', name: 'next' })"
+          >
+            {{ t("next") }}
+          </button>
+          <button type="button" @click="emit('input', { kind: 'action', name: 'menu' })">{{ t("map") }}</button>
+        </div>
+      </template>
+    </div>
   </section>
 </template>
 
@@ -302,13 +348,20 @@ watch(
 .interactive-routes {
   display: none;
 }
+
+body:has(.game) {
+  overflow: hidden;
+}
 </style>
 
 <style scoped>
 .game {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
   padding: 1rem;
+  overflow-y: auto;
   border: 3px solid #5ce1e6;
-  border-radius: 1rem;
   background:
     radial-gradient(circle at 12% 18%, #ffffff 0, #ffffff 1px, transparent 2px),
     radial-gradient(circle at 78% 10%, #ffffff 0, #ffffff 1px, transparent 2px),
@@ -329,6 +382,42 @@ h3 {
 
 a {
   color: #ffd166;
+}
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 60rem;
+  min-height: 100%;
+  margin: 0 auto;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.2rem;
+  margin: 0.4rem 0;
+  font-size: 0.85rem;
+}
+
+button.link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #ffd166;
+  font: inherit;
+  text-decoration: underline;
 }
 
 .marquee {
@@ -365,6 +454,9 @@ a {
 }
 
 .planet {
+  padding: 0;
+  border: 0;
+  background: none;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -566,7 +658,7 @@ button {
 
 .field {
   position: relative;
-  height: 22rem;
+  height: min(55vh, 30rem);
   margin: 0.5rem 0;
   border-radius: 0.5rem;
   background:

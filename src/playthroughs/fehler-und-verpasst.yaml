@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=../../node_modules/@lernapps/app-templates/runtime/interactive/playthrough.v1.schema.json
 # Chapter 1, level 1: a wrong key takes 3 percent of the shield and ends the combo; the first letter picks the comet,
 # a wrong key after it counts again; the comet then arrives after 11 seconds and takes 11 percent (8 plus 1 per letter).
-route: de-1
+route: de
 seed: 1
 steps:
   - keys: ["Enter"]

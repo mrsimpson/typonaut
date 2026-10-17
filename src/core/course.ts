@@ -27,7 +27,7 @@ export type Course = "de" | "en";
 
 export const COURSES: Readonly<Record<Course, CourseData>> = { de, en };
 
-/** The course and chapter of a route id such as `de-3`; the first chapter of German for an unknown id. */
+/** The course and chapter of a route id: `de` or `en` (the chapter is chosen in the map), also `de-3` for a given chapter. */
 export function parseRoute(route: string): { course: Course; chapter: number } {
   const [lang, number] = route.split("-");
   const course: Course = lang === "en" ? "en" : "de";

@@ -59,5 +59,10 @@
   "record": "Gesammelter Sternenstaub: {dust}",
   "startButton": "START",
   "levels": "Level",
-  "stars": "{n} von 3 Sternen"
+  "stars": "{n} von 3 Sternen",
+  "info": "Infos zur App",
+  "fullscreen": "Vollbild",
+  "more": "Mehr",
+  "uiLanguage.de": "Deutsch",
+  "uiLanguage.en": "English"
 }

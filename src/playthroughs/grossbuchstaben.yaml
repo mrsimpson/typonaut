@@ -1,8 +1,11 @@
 # yaml-language-server: $schema=../../node_modules/@lernapps/app-templates/runtime/interactive/playthrough.v1.schema.json
 # Chapter 2, capital letters: every run starts with a capital letter, typed with Shift as the browser names it.
-route: de-2
+route: de
 seed: 36
 steps:
+  - inputs: [{ kind: action, name: chapter, value: 2 }]
+    state: { chapter: 2, phase: menu }
+    announce: Kapitel 2. Wähle ein Level.
   - keys: ["1"]
     state: { level: 1, phase: menu }
     announce: Level 1 gewählt.

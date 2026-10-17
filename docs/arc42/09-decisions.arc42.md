@@ -418,4 +418,20 @@ addresses: qg-accessibility
 :::
 ```
 
+## The Chapter Is Chosen in the Game, Not in the Address
+
+The static start page lists the routes of `app.yaml`, and twenty-four chapter links would bury its text. The two courses are
+the only routes (`de`, `en`); the chapter is state of the core, set by the action `chapter` in the map, which is full screen
+over the page so that the plain route list is not seen. Rejected: one route per chapter (a long list on the start page).
+
+```arc42
+:::decision
+id: dec-chapter-in-state
+title: Two routes, the chapter is state of the core
+status: accepted
+date: 2026-10-17
+addresses: qg-understandable
+:::
+```
+
 <!-- app: end -->

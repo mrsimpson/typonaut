@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=../../node_modules/@lernapps/app-templates/runtime/interactive/playthrough.v1.schema.json
 # Chapter 1 of the English course, level 1: runs of the home row of the QWERTY layout, with the semicolon.
-route: en-1
+route: en
 seed: 1
 steps:
   - keys: ["1"]

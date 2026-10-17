@@ -49,7 +49,7 @@ A chapter is three levels, each a round with a fixed number of comets (`LEVELS` 
 level 1 has 10 runs of 2 to 4 keys (the chapter's new keys mixed with the keys of chapter 1; chapter 2: capital first), one comet at a time, with the keyboard hint
 (`src/ui/Keyboard.vue`); level 2 has 10 words, two at a time, 70 % from the chapter's own `words`, 30 % from earlier chapters,
 hint only as text; level 3 has 14 words, three at a time, mixed from all chapters up to this one, no hint. A round takes
-about two to four minutes. Routes are `de-1` to `de-12` and `en-1` to `en-12` in `src/app.yaml`; the level is state of the core.
+about two to four minutes. The routes in `src/app.yaml` are only the two courses, `de` and `en` (the static start page lists nothing more); the chapter and the level are state of the core, chosen in the map with the actions `chapter` and `level`. The map is full screen over the page; the runtime's route list is hidden while the app runs.
 
 ## Terminology
 
@@ -90,7 +90,7 @@ The creator's own material does not exist; nothing local is committed.
 
 1. To add words to a chapter or a whole chapter, edit `chapters` in `src/data/de.json` or `src/data/en.json`: `id`, `keys` (the keys the chapter introduces), `words`
    (only keys introduced up to this chapter; capitals only from chapter 2). Add its fingers to `layout.fingers` if a key is new.
-2. Add the route `de-<n>` or `en-<n>` to `routes` in `src/app.yaml` with title and description in German and English; `chapters.length` must match.
+2. No route is needed for a chapter: the map lists `chapters` of the course. Only a new language needs a route in `src/app.yaml` (id = the language code) with title and description in German and English.
 3. Run `npx vp test`: `src/core/course.test.ts` rejects a word with a key not yet introduced, a missing finger and too few words (7 or more).
 4. For a new language add `src/data/<lang>.json`, the course in `src/core/course.ts` (`COURSES`, `Course`), `course.<lang>` and the texts in every message file and `languages`.
 5. Add or update a playthrough in `src/playthroughs/` for the behaviour; write the competency in `src/app.yaml` and in this guide;

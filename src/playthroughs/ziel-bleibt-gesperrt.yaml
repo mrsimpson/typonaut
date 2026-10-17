@@ -1,9 +1,11 @@
 # yaml-language-server: $schema=../../node_modules/@lernapps/app-templates/runtime/interactive/playthrough.v1.schema.json
 # Chapter 5, level 3, two comets in flight: the first letter of the younger one picks it. The first letter of the older one
 # is then a wrong key, because the picked comet stays picked until it is typed.
-route: de-5
+route: de
 seed: 1
 steps:
+  - inputs: [{ kind: action, name: chapter, value: 5 }]
+    state: { chapter: 5, phase: menu }
   - keys: ["3", "Enter"]
     ticks: 265
     state: { phase: play, level: 3, spawned: 2 }

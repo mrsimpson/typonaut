@@ -1,8 +1,11 @@
 # yaml-language-server: $schema=../../node_modules/@lernapps/app-templates/runtime/interactive/playthrough.v1.schema.json
 # Chapter 5 of the English course (r u), level 2: English words on the QWERTY layout.
-route: en-5
+route: en
 seed: 2
 steps:
+  - inputs: [{ kind: action, name: chapter, value: 5 }]
+    state: { chapter: 5, phase: menu }
+    announce: Kapitel 5. Wähle ein Level.
   - keys: ["2"]
     state: { level: 2, phase: menu }
     announce: Level 2 gewählt.

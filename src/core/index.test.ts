@@ -131,3 +131,25 @@ describe("every chapter of both courses", () => {
     expect(state.bursts).toHaveLength(0);
   });
 });
+
+describe("the chapter is chosen in the map", () => {
+  const chapter = (state: State, value: number): State => step(state, { kind: "action", name: "chapter", value });
+
+  test("a route of a course starts at its first chapter, the action picks another one", () => {
+    const state = start(1, "en");
+    expect(state).toMatchObject({ course: "en", chapter: 1, phase: "menu" });
+    expect(chapter(state, 6)).toMatchObject({ chapter: 6, last: "chapter" });
+    expect(chapter(state, 13)).toBe(state);
+    expect(chapter(state, 0)).toBe(state);
+  });
+
+  test("the chapter stays when a round is left, lost or won", () => {
+    let state = press(chapter(start(1, "de"), 4), "Enter");
+    while (state.comets.length === 0) state = tick(state, 20);
+    expect(press(state, "Escape")).toMatchObject({ phase: "menu", chapter: 4 });
+    state = press(state, ...Array.from({ length: 40 }, () => "#"));
+    expect(state.phase).toBe("lost");
+    expect(step(state, { kind: "action", name: "menu" })).toMatchObject({ phase: "menu", chapter: 4 });
+    expect(step(state, { kind: "action", name: "again" })).toMatchObject({ phase: "play", chapter: 4 });
+  });
+});

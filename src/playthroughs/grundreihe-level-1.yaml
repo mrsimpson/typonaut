@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=../../node_modules/@lernapps/app-templates/runtime/interactive/playthrough.v1.schema.json
 # Chapter 1 of the German course, level 1: ten runs of keys of the home row (a seed whose runs have no ö: the end-to-end tests type on a US keyboard), each typed as soon as it appears; the level is won.
-route: de-1
+route: de
 seed: 36
 steps:
   - keys: ["1"]

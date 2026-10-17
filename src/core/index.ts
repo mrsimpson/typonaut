@@ -39,7 +39,18 @@ export interface Burst {
   at: number;
 }
 
-export type Last = "menu" | "start" | "pick" | "hit" | "wrong" | "destroyed" | "missed" | "won" | "lost" | "level";
+export type Last =
+  | "menu"
+  | "start"
+  | "pick"
+  | "hit"
+  | "wrong"
+  | "destroyed"
+  | "missed"
+  | "won"
+  | "lost"
+  | "level"
+  | "chapter";
 
 export interface State {
   seed: number;
@@ -245,10 +256,15 @@ export function positionOf(comet: Comet, time: number): { x: number; y: number; 
   };
 }
 
+/** The map of the same course and chapter: a fresh state with what the learner chose kept. */
+function map(state: State, level: 1 | 2 | 3): State {
+  return { ...start(state.seed, state.route), chapter: state.chapter, level, attempt: state.attempt };
+}
+
 function begin(state: State, level: 1 | 2 | 3): State {
   const attempt = state.attempt + 1;
   return {
-    ...start(state.seed, state.route),
+    ...map(state, level),
     phase: "play",
     level,
     attempt,
@@ -337,8 +353,7 @@ const asks = (input: Input, key: string, action: string): boolean =>
 
 export function step(state: State, input: Input): State {
   if (state.phase === "play") {
-    if (asks(input, "Escape", "menu"))
-      return { ...start(state.seed, state.route), level: state.level, attempt: state.attempt };
+    if (asks(input, "Escape", "menu")) return map(state, state.level);
     if (input.kind !== "key") return state;
     // keys that would scroll the page or leave the game: a new object makes the shell keep them from their default
     if (SWALLOWED.includes(input.key)) return { ...state };
@@ -351,17 +366,19 @@ export function step(state: State, input: Input): State {
     return { ...state, level, last: "level" };
   }
   if (state.phase === "menu") {
+    if (input.kind === "action" && input.name === "chapter") {
+      const chapter = Number(input.value);
+      const count = COURSES[state.course].chapters.length;
+      if (!Number.isInteger(chapter) || chapter < 1 || chapter > count) return state;
+      return { ...state, chapter, last: "chapter" };
+    }
     if (input.kind === "key" && ["1", "2", "3"].includes(input.key)) {
       return { ...state, level: Number(input.key) as 1 | 2 | 3, last: "level" };
     }
     return asks(input, "Enter", "start") ? begin(state, state.level) : state;
   }
   // won or lost
-  const menu = (level: 1 | 2 | 3): State => ({
-    ...start(state.seed, state.route),
-    level,
-    attempt: state.attempt,
-  });
+  const menu = (level: 1 | 2 | 3): State => map(state, level);
   if (input.kind === "action" && input.name === "next") return menu(Math.min(3, state.level + 1) as 1 | 2 | 3);
   if (asks(input, "Escape", "menu")) return menu(state.level);
   if (state.phase === "won" && asks(input, "Enter", "start")) return menu(Math.min(3, state.level + 1) as 1 | 2 | 3);

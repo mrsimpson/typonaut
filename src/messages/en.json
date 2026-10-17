@@ -58,5 +58,10 @@
   "record": "Stardust collected: {dust}",
   "startButton": "START",
   "levels": "Level",
-  "stars": "{n} of 3 stars"
+  "stars": "{n} of 3 stars",
+  "info": "About the app",
+  "fullscreen": "Full screen",
+  "more": "More",
+  "uiLanguage.de": "Deutsch",
+  "uiLanguage.en": "English"
 }

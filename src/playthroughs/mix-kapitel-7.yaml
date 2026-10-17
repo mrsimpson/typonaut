@@ -1,8 +1,11 @@
 # yaml-language-server: $schema=../../node_modules/@lernapps/app-templates/runtime/interactive/playthrough.v1.schema.json
 # Chapter 7 (w o), level 3: three comets at a time, words of this and earlier chapters.
-route: de-7
+route: de
 seed: 9
 steps:
+  - inputs: [{ kind: action, name: chapter, value: 7 }]
+    state: { chapter: 7, phase: menu }
+    announce: Kapitel 7. Wähle ein Level.
   - keys: ["3"]
     state: { level: 3, phase: menu }
     announce: Level 3 gewählt.

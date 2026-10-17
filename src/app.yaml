@@ -37,174 +37,20 @@ competencies:
     en: I can copy words with few mistakes and notice which keys are still hard for me.
 languages: [de, en]
 routes:
-  - id: de-1
+  - id: de
     title:
-      de: "Deutsch 1: Grundreihe"
-      en: "German 1: Home row"
+      de: Deutsch (deutsche Tastatur, QWERTZ)
+      en: German (German keyboard, QWERTZ)
     description:
-      de: "Tasten: a s d f j k l ö"
-      en: "Keys: a s d f j k l ö"
-  - id: de-2
+      de: Zwölf Kapitel mit deutschen Wörtern, von der Grundreihe bis zu ä, ü, ö und ß.
+      en: Twelve chapters with German words, from the home row to ä, ü, ö and ß.
+  - id: en
     title:
-      de: "Deutsch 2: Großbuchstaben"
-      en: "German 2: Capital letters"
+      de: Englisch (englische Tastatur, QWERTY)
+      en: English (English keyboard, QWERTY)
     description:
-      de: "Tasten: A S D F J K L Ö"
-      en: "Keys: A S D F J K L Ö"
-  - id: de-3
-    title:
-      de: "Deutsch 3: g h"
-      en: "German 3: g h"
-    description:
-      de: "Tasten: g h"
-      en: "Keys: g h"
-  - id: de-4
-    title:
-      de: "Deutsch 4: e i"
-      en: "German 4: e i"
-    description:
-      de: "Tasten: e i"
-      en: "Keys: e i"
-  - id: de-5
-    title:
-      de: "Deutsch 5: r u"
-      en: "German 5: r u"
-    description:
-      de: "Tasten: r u"
-      en: "Keys: r u"
-  - id: de-6
-    title:
-      de: "Deutsch 6: t z"
-      en: "German 6: t z"
-    description:
-      de: "Tasten: t z"
-      en: "Keys: t z"
-  - id: de-7
-    title:
-      de: "Deutsch 7: w o"
-      en: "German 7: w o"
-    description:
-      de: "Tasten: w o"
-      en: "Keys: w o"
-  - id: de-8
-    title:
-      de: "Deutsch 8: q p"
-      en: "German 8: q p"
-    description:
-      de: "Tasten: q p"
-      en: "Keys: q p"
-  - id: de-9
-    title:
-      de: "Deutsch 9: b n"
-      en: "German 9: b n"
-    description:
-      de: "Tasten: b n"
-      en: "Keys: b n"
-  - id: de-10
-    title:
-      de: "Deutsch 10: v m"
-      en: "German 10: v m"
-    description:
-      de: "Tasten: v m"
-      en: "Keys: v m"
-  - id: de-11
-    title:
-      de: "Deutsch 11: c x , ."
-      en: "German 11: c x , ."
-    description:
-      de: "Tasten: c x , ."
-      en: "Keys: c x , ."
-  - id: de-12
-    title:
-      de: "Deutsch 12: y ä ü ß ? -"
-      en: "German 12: y ä ü ß ? -"
-    description:
-      de: "Tasten: y ä ü ß ? -"
-      en: "Keys: y ä ü ß ? -"
-  - id: en-1
-    title:
-      de: "Englisch 1: Grundreihe"
-      en: "English 1: Home row"
-    description:
-      de: "Tasten: a s d f j k l ;"
-      en: "Keys: a s d f j k l ;"
-  - id: en-2
-    title:
-      de: "Englisch 2: Großbuchstaben"
-      en: "English 2: Capital letters"
-    description:
-      de: "Tasten: A S D F J K L ;"
-      en: "Keys: A S D F J K L ;"
-  - id: en-3
-    title:
-      de: "Englisch 3: g h"
-      en: "English 3: g h"
-    description:
-      de: "Tasten: g h"
-      en: "Keys: g h"
-  - id: en-4
-    title:
-      de: "Englisch 4: e i"
-      en: "English 4: e i"
-    description:
-      de: "Tasten: e i"
-      en: "Keys: e i"
-  - id: en-5
-    title:
-      de: "Englisch 5: r u"
-      en: "English 5: r u"
-    description:
-      de: "Tasten: r u"
-      en: "Keys: r u"
-  - id: en-6
-    title:
-      de: "Englisch 6: t y"
-      en: "English 6: t y"
-    description:
-      de: "Tasten: t y"
-      en: "Keys: t y"
-  - id: en-7
-    title:
-      de: "Englisch 7: w o"
-      en: "English 7: w o"
-    description:
-      de: "Tasten: w o"
-      en: "Keys: w o"
-  - id: en-8
-    title:
-      de: "Englisch 8: q p"
-      en: "English 8: q p"
-    description:
-      de: "Tasten: q p"
-      en: "Keys: q p"
-  - id: en-9
-    title:
-      de: "Englisch 9: b n"
-      en: "English 9: b n"
-    description:
-      de: "Tasten: b n"
-      en: "Keys: b n"
-  - id: en-10
-    title:
-      de: "Englisch 10: v m"
-      en: "English 10: v m"
-    description:
-      de: "Tasten: v m"
-      en: "Keys: v m"
-  - id: en-11
-    title:
-      de: "Englisch 11: c x , ."
-      en: "English 11: c x , ."
-    description:
-      de: "Tasten: c x , ."
-      en: "Keys: c x , ."
-  - id: en-12
-    title:
-      de: "Englisch 12: z ' ? -"
-      en: "English 12: z ' ? -"
-    description:
-      de: "Tasten: z ' ? -"
-      en: "Keys: z ' ? -"
+      de: Zwölf Kapitel mit englischen Wörtern, von der Grundreihe bis zum Apostroph.
+      en: Twelve chapters with English words, from the home row to the apostrophe.
 sections:
   - id: warum
     title:
