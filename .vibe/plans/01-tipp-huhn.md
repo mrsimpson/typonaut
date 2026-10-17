@@ -123,7 +123,7 @@ from earlier answers. Write each answer under "Answers".
 - [x] Choose the archetype from the answers: `explainer` (many pages of explanation and exercises), `interactive`
       (one app page in the browser, plus a static start page) or `quiz` (questions with options and feedback).
       Write it under "Key decisions" with the reason; set `archetype`.
-- [ ] **Checkpoint:** research. Explain to the creator, in plain words, what you found and how: the curriculum
+- [x] **Checkpoint:** research (confirmed by the creator with "Großartig"; the box was left unticked until the review). Explain to the creator, in plain words, what you found and how: the curriculum
       orientation, the competencies by chapter, the sources and how you checked them, what you could not check, and
       the archetype with its reason. Stop and wait for the creator. Change it if they ask, then ask again.
 - [x] Set `phase: plan`.
@@ -354,4 +354,4 @@ Each place where this plan, a skill, a message or the creator's answers did not 
 chose. Write "None" if there was none.
 -->
 
-No locked levels (the core cannot read the device); word lists written by the assistant and spread over chapters by a script; fingers of y, ß, - and ? (German) and z, ', ? and - (English) from the usual charts, not from a source; the pace of levels 2 and 3 from a bot playtest at a child's tempo; the README added so that a push publishes (a push of only `.vibe/` does not); `ARC42_CONSISTENT` used after review; the app's touch decision (a note instead of an on-screen keyboard input) was taken on the assistant's recommendation; the creator's "publish" yes was read from the rename and the wish to switch Pages.
+No locked levels (the core cannot read the device); word lists written by the assistant and spread over chapters by a script; fingers of y, ß, - and ? (German) first from the usual charts, later checked in the Wikipedia article Zehnfingersystem, and z, ', ? and - (English) from the usual charts, not from a source (the start page says so); the `limits` text of the entry (no screen reader, no phone) was worded by the assistant; the name of the creator in the entry was "mrsimpson" until the creator gave "Oliver"; the pace of levels 2 and 3 from a bot playtest at a child's tempo; the README added so that a push publishes (a push of only `.vibe/` does not); `ARC42_CONSISTENT` used after review; the app's touch decision (a note instead of an on-screen keyboard input) was taken on the assistant's recommendation; the creator's "publish" yes was read from the rename and the wish to switch Pages.

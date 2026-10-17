@@ -82,8 +82,14 @@ Verified by reading: Leitfaden Tastaturschreiben, Kanton Schwyz, 2024 (see Curri
 finger of each letter of lessons 6 to 54 (g h left/right index, e i middle, r u index, t z index, w o ring, q p little finger, b n index, v m index,
 c and comma middle/right middle, x and full stop ring, ä ü right little finger), the methodic points (accuracy before speed, no looking, return to the
 home row, distributed practice, 10 to 15 minutes), the goal of 500 strokes in ten minutes (not used as a target in the game). The text is the authors',
-no free licence was seen: no sentence is copied. NOT CHECKED against a source: the finger of y, ß, - and ? on the German keyboard and of z, ', ? and - on the English one;
-they follow the usual touch-typing charts. The words are written by the creator and the assistant, nothing is taken from word lists of others. No video and no second article is linked.
+no free licence was seen: no sentence is copied.
+
+Verified by reading (downloaded and read): de.wikipedia.org/wiki/Zehnfingersystem, section "Bedienung der Tasten" (CC BY-SA 4.0): the
+finger of every key of the German keyboard, among them y (left little finger), ß, - and ä ü ö (right little finger); "?" is the shifted ß and follows it.
+The start page names this source. en.wikipedia.org/wiki/Touch_typing (CC BY-SA 4.0): the home row a s d f / j k l ; and that the little finger reaches p;
+its finger chart is an image that could not be read as text. NOT CHECKED against a source: z, ', ? and - on the English keyboard (left little finger z,
+right little finger ' - and ?); they follow the usual charts and the start page says so. The Lehrplan 21 is not used as a source (its page was not opened).
+The words are written by the assistant with the creator, nothing is taken from word lists of others; the start page says so. No video and no second article is linked.
 The creator's own material does not exist; nothing local is committed.
 
 ## Adding a chapter or round
