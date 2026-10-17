@@ -45,6 +45,43 @@ Mark a choice you made without asking the creator with "(guess)", and list it in
 
 <!-- What you need later: sources and licences of content, links, open questions. -->
 
+Curriculum orientation: no Lehrplan of a German Land was found that fixes keyboarding (search found none; not checked
+in the official documents of the Länder). Orientation instead: Lehrplan 21 (Schweiz), where Tastaturschreiben sits in
+Deutsch D.4.A.e (Zyklus 2) and in Medien und Informatik; found only via a search summary, the Lehrplan itself not
+opened: NOT CHECKED.
+
+Verified source (downloaded and read): Kanton Schwyz, Amt für Volksschulen und Sport, "Leitfaden Tastaturschreiben"
+(Version 2024), https://www.sz.ch/public/upload/assets/65825/Leitfaden_Tastaturschreiben.pdf. Licence: © of the
+authors, no free licence seen: take facts, not sentences. Facts used:
+- Ziel Ende Klasse 6: 500 Anschläge in 10 Min (50/Min), max. 3 Fehler; Klasse 4/5: 350 Anschläge/10 Min, <5 % Fehler.
+  Perfektes Blindschreiben ist ausdrücklich nicht Ziel; Fokus auf Buchstaben (auch Umlaute) und gängige Satzzeichen.
+- Reihenfolge (Anhang 2, Levels): 1 asdf jklö; 2 Großbuchstaben (Umschalttaste mit dem kleinen Finger der Gegenhand,
+  schon ab Lektion 3); 3 gh; 4 ei; 5 ru; 6 tz; 7 wo; 8 pq und ?; 9 bn; 10 vm; 11 c ,; 12 x .; 13 y - ä; 14 ü Ä Ö Ü;
+  15 Ziffern und Sonderzeichen. Je Level ca. 2 neue Zeichen samt Großbuchstaben; je Zeichenpaar: Einführung,
+  Wörter, Abschreibtext, Wiederholung.
+- Methodik (Kap. 6): Genauigkeit vor Tempo; jeder Finger nur für seine Tasten; Finger nach jedem Anschlag zurück
+  in die Grundstellung (Fühlpunkte F/J); Großbuchstaben mit beiden Händen; nicht auf die Tastatur schauen von
+  Anfang an; kurze, verteilte Übungseinheiten (10 bis 15 Min, mehrmals pro Woche) wirken besser als lange Blöcke;
+  Tempo am Anfang bewusst langsam; Lektion erst wiederholen, wenn nicht bestanden.
+- Hinweis: Das ist die Schweizer Tastatur (ö/ä auf der Grundreihe, kein ß, é è à). Die deutsche Belegung (DIN 2137)
+  weicht ab (ß, ä am rechten Rand der Grundreihe, ü rechts neben p): NOT CHECKED, vor dem Plan an einer Quelle
+  prüfen.
+
+Not found: a controlled study comparing lesson orders. Home row first, then the reaches, is the common practice of
+school curricula, not an evidence-backed optimum. The search result pages (ERIC ED313002 on Dvorak and children,
+UK scheme of work) were seen only as search snippets, not opened.
+
+Competencies by chapter (draft, for the checkpoint):
+1. Grundstellung: Ich kann meine Finger in die Grundstellung (asdf jklö) legen und die Fühlpunkte auf F und J finden. /
+   Ich kann die Grundreihe tippen, ohne auf die Tastatur zu schauen.
+2. Großschreibung: Ich kann Großbuchstaben mit der Umschalttaste der anderen Hand tippen.
+3. Innere Tasten (g h) und Mittelfinger (e i), dann r u, t z: Ich kann ... mit dem richtigen Finger tippen und danach
+   den Finger zur Grundstellung zurückbringen.
+4. Obere und untere Reihe (w o, p q, b n, v m, c x), Satzzeichen (. , ? -).
+5. Umlaute und ß, y: je nach Layout.
+6. Wörter und Sätze: Ich kann einen kurzen Text fehlerarm abtippen.
+
+
 ## Explore
 
 <!--
@@ -57,7 +94,7 @@ from earlier answers. Write each answer under "Answers".
 
 - [x] Install the skills, if they are not installed yet: `npx skills add lernapps/tooling`. The app commits them.
 - [x] Ask what the app is for: what do learners do in it, and what do they learn or train?
-- [ ] Ask who the learners are: subject, school year, what they know already.
+- [x] Ask who the learners are: subject, school year, what they know already.
 - [ ] Ask where the content comes from: written by the creator, or taken from others (with source and licence)?
 - [ ] Research the content: load the skill `lernapps-content-research` and follow it (in an app whose
       `.agents/skills/app-content/SKILL.md` is filled in, load that first; it takes precedence). Write the curriculum
@@ -79,6 +116,8 @@ from earlier answers. Write each answer under "Answers".
 <!-- The creator's answers, in their words, one bullet per question. -->
 
 - Zweck: verspielte Version eines Zehn-Finger-Schreiblernprogramms für Kinder. Klassischer Lehrgang (Grundreihe, dann Schritt für Schritt die Tastatur erforschen). Die zu tippenden Zeichenfolgen fliegen wie im Spiel „Moorhuhn“ in einer Parabel über den Bildschirm und müssen abgetippt werden; ist die Folge getippt, explodiert das Wort und es gibt Punkte, mehr für schwierige Wörter.
+- Lernende: Start bei null, kein Vorwissen. Tastaturschreiben steht nicht im klassischen Lehrplan, es ist eher eine digitale Kompetenz.
+- Auftrag: Recherchieren, welche Lernreihenfolge didaktisch sinnvoll ist; sie hängt von Tastaturlayout und Sprache ab.
 
 ### Entry draft
 
