@@ -44,7 +44,7 @@ Mark a choice you made without asking the creator with "(guess)", and list it in
 - Archetype interactive: das Spiel (Wörter fliegen, abtippen) ist selbst der Inhalt; keine Erklärseiten nötig.
 - Lehrgang als Daten je Layout (QWERTZ/Deutsch, QWERTY/Englisch), Reihenfolge nach dem Schwyzer Leitfaden: Grundreihe, Großbuchstaben, dann paarweise neue Tasten.
 - Veröffentlichung unter https://mrsimpson.github.io/tipp-huhn/ (aus dem Repo-Owner abgeleitet).
-- Ersteller im Eintrag: "mrsimpson" (guess: Name nicht genannt, Repo-Owner verwendet).
+- Ersteller im Eintrag: "Oliver" (Vorname, vom Ersteller genannt; vorher "mrsimpson" als Vermutung).
 - Oberfläche, Übungswörter und Layout in Deutsch und Englisch (Wunsch des Erstellers); Deutsch kommt zuerst, jede Sprache ist vollständig (interactive-app-valid).
 - Nur mit Hardware-Tastatur gedacht, nicht fürs Handy; das und der Zeitdruck kommen als "limits" in den Eintrag (guess).
 - Thema Huhn entfällt (Moorhuhn kennt die Zielgruppe nicht). Thema bestätigt: Weltraumreise, Wörter als Kometen mit Schweif, Energie = Schutzschild, Sternenstaub als Punktekonto pro Kapitel (Kapitel = Planeten/Stationen).
@@ -164,7 +164,7 @@ summary:
     an English keyboard.
 url: https://mrsimpson.github.io/typonaut/
 creator:
-  name: mrsimpson
+  name: Oliver
 source: https://github.com/mrsimpson/typonaut
 keywords: [Zehnfingersystem, Tastaturschreiben, Tippen lernen, Schreibtraining, Tastatur, Spiel]
 limits: >-
@@ -354,4 +354,4 @@ Each place where this plan, a skill, a message or the creator's answers did not 
 chose. Write "None" if there was none.
 -->
 
-No locked levels (the core cannot read the device); word lists written by the assistant and spread over chapters by a script; fingers of y, ß, - and ? (German) and z, ', ? and - (English) from the usual charts, not from a source; the pace of levels 2 and 3 from a bot playtest at a child's tempo; Ersteller shown as "mrsimpson" in the entry; the README added so that a push publishes (a push of only `.vibe/` does not); `ARC42_CONSISTENT` used after review; the app's touch decision (a note instead of an on-screen keyboard input) was taken on the assistant's recommendation; the creator's "publish" yes was read from the rename and the wish to switch Pages.
+No locked levels (the core cannot read the device); word lists written by the assistant and spread over chapters by a script; fingers of y, ß, - and ? (German) and z, ', ? and - (English) from the usual charts, not from a source; the pace of levels 2 and 3 from a bot playtest at a child's tempo; the README added so that a push publishes (a push of only `.vibe/` does not); `ARC42_CONSISTENT` used after review; the app's touch decision (a note instead of an on-screen keyboard input) was taken on the assistant's recommendation; the creator's "publish" yes was read from the rename and the wish to switch Pages.
