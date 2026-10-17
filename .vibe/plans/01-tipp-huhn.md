@@ -293,9 +293,9 @@ after the push (`gh run list --workflow Pages --branch main --commit <commit>` l
         Source: Deploy from a branch → Branch: gh-pages, folder: / (root) → Save.
       - The default branch, once `main` is pushed: Settings → General → Default branch → ⇄ (Switch to another
         branch) → main → Update.
-- [ ] **Checkpoint:** publish. Ask the creator before the app goes online, and wait for their yes. Put the clicks you
+- [x] **Checkpoint:** publish. Ask the creator before the app goes online, and wait for their yes. Put the clicks you
       noted into the same question, to make after the first run, so that they cost no extra turn.
-- [ ] Create `main` from `work` and push it: `git switch -c main`, `git push -u origin main`. Check that a run of
+- [x] Create `main` from `work` and push it: `git switch -c main`, `git push -u origin main`. Check that a run of
       the workflow `Pages` started for this commit:
       `gh run list --workflow Pages --branch main --commit "$(git rev-parse HEAD)"`. GitHub may start none for a
       push that creates a branch from commits it already has. If none is listed a minute after the push, start it:
@@ -305,7 +305,7 @@ after the push (`gh run list --workflow Pages --branch main --commit <commit>` l
       the setting is made (for example `gh api repos/<owner>/<repo>/pages` names `gh-pages`) and run the failed jobs
       again (`gh run rerun <id> --failed`); otherwise tell the creator the exact clicks the message names, and run
       them again when they are done.
-- [ ] Set the default branch to `main`: `gh repo edit --default-branch main`, or the creator's clicks from the
+- [x] Set the default branch to `main`: `gh repo edit --default-branch main`, or the creator's clicks from the
       checkpoint. The run of `Pages` warns while it is another branch.
 - [ ] Open the address the job `deploy` printed ("published at ...", also in the run's summary) and confirm that it
       shows the app. Take that address, never one you derive: a repo whose owner has its own domain is served there,
