@@ -284,9 +284,9 @@ after the push (`gh run list --workflow Pages --branch main --commit <commit>` l
 ### Tasks
 
 - [ ] Vor der ersten Veröffentlichung: Der Ersteller hat das Repo umbenannt (`git remote set-url origin` anpassen); `url` und `source` im Eintragsentwurf und im App-Titel auf den neuen Namen setzen.
-- [ ] Push the branch `work` (not `main`): `git push -u origin work`. The pre-push hook runs the heavy checks; fix
+- [x] Push the branch `work` (not `main`): `git push -u origin work`. The pre-push hook runs the heavy checks; fix
       what fails.
-- [ ] Check the repo's settings on GitHub: the default branch (`gh repo view --json defaultBranchRef`) and GitHub
+- [x] Check the repo's settings on GitHub (no gh CLI here: the clicks are put to the creator at the checkpoint; the default branch is `work` until `main` exists): the default branch (`gh repo view --json defaultBranchRef`) and GitHub
       Pages (`gh api repos/<owner>/<repo>/pages`; "Not Found" means it is off). For each one that is not right and
       that you may not change, note the clicks of a repository admin:
       - Pages, once the first run has created the branch `gh-pages`: Settings → Pages → Build and deployment →
