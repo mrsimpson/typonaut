@@ -1,12 +1,12 @@
 import { describe, expect, test } from "vite-plus/test";
 import { COURSES } from "./course.ts";
-import { LEVELS, SHIP, positionOf, start, step, tick, type State } from "./index.ts";
+import { LEVELS, SHIP, pace, positionOf, start, step, tick, type Level, type State, waveOf } from "./index.ts";
 
 const press = (state: State, ...keys: string[]): State =>
   keys.reduce((current, key) => step(current, { kind: "key", key }), state);
 
 /** Starts level 1 of a route and lets time pass until the first comet is in flight. */
-function firstComet(route: string, seed: number, level: 1 | 2 | 3 = 1): State {
+function firstComet(route: string, seed: number, level: Level = 1): State {
   let state = press(start(seed, route), String(level), "Enter");
   while (state.comets.length === 0) state = tick(state, 20);
   return state;
@@ -151,5 +151,96 @@ describe("the chapter is chosen in the map", () => {
     expect(state.phase).toBe("lost");
     expect(step(state, { kind: "action", name: "menu" })).toMatchObject({ phase: "menu", chapter: 4 });
     expect(step(state, { kind: "action", name: "again" })).toMatchObject({ phase: "play", chapter: 4 });
+  });
+});
+
+describe("the collector never ends by itself and gets faster", () => {
+  const collector = (route: string): State => press(start(5, route), "4", "Enter");
+
+  test("it is level 4, has no total and spawns on after any number of comets", () => {
+    let state = collector("de-3");
+    expect(state).toMatchObject({ phase: "play", level: 4, total: 0 });
+    let typed = 0;
+    for (let ticks = 0; ticks < 40000 && typed < 60; ticks++) {
+      state = tick(state, 20);
+      const comet = state.comets[0];
+      if (comet !== undefined) {
+        state = press(state, ...comet.word.split(""));
+        typed += 1;
+      }
+    }
+    expect(typed).toBe(60);
+    expect(state).toMatchObject({ phase: "play", errors: 0, shield: 100 });
+    expect(state.destroyed).toBe(60);
+  });
+
+  test("the flights get shorter and more comets come at once", () => {
+    const flightAfter = (spawned: number): { flight: number; most: number } => {
+      let state: State = { ...collector("de-4"), spawned };
+      let most = 0;
+      for (let ticks = 0; ticks < 600; ticks++) {
+        state = tick(state, 20);
+        most = Math.max(most, state.comets.length);
+      }
+      return { flight: state.comets[0]?.flight ?? 0, most };
+    };
+    const early = flightAfter(0);
+    const late = flightAfter(40);
+    expect(late.flight).toBeLessThan(early.flight);
+    expect(late.most).toBeGreaterThan(early.most);
+    expect(pace(1000)).toBe(8);
+    expect(waveOf(1)).toBe(1);
+    expect(waveOf(11)).toBe(2);
+  });
+
+  test("an empty shield ends the flight with the score", () => {
+    let state = collector("de-1");
+    while (state.comets.length === 0) state = tick(state, 20);
+    state = press(state, ...Array.from({ length: 40 }, () => "#"));
+    expect(state.phase).toBe("lost");
+    expect(state.level).toBe(4);
+    expect(step(state, { kind: "action", name: "again" })).toMatchObject({ phase: "play", level: 4 });
+  });
+});
+
+describe("the flow from level to level", () => {
+  const won = (route: string, level: Level): State => {
+    let state = press(start(7, route), String(level), "Enter");
+    for (let ticks = 0; state.phase === "play" && ticks < 20000; ticks++) {
+      state = tick(state, 20);
+      const comet = state.comets[0];
+      if (comet !== undefined) state = press(state, ...comet.word.split(""));
+    }
+    return state;
+  };
+
+  test("Enter or the button after a won level starts the next level at once", () => {
+    const state = won("de-3", 1);
+    expect(press(state, "Enter")).toMatchObject({ phase: "play", level: 2, chapter: 3 });
+    expect(step(state, { kind: "action", name: "next" })).toMatchObject({ phase: "play", level: 2, chapter: 3 });
+  });
+
+  test("after level 3 the map shows the next chapter at level 1", () => {
+    expect(press(won("de-3", 3), "Enter")).toMatchObject({ phase: "menu", chapter: 4, level: 1 });
+    expect(press(won("de-12", 3), "Enter")).toMatchObject({ phase: "menu", chapter: 12, level: 1 });
+  });
+
+  test("Enter after a lost level tries it again", () => {
+    const lost = press(firstComet("de-1", 1), ...Array.from({ length: 40 }, () => "x"));
+    expect(press(lost, "Enter")).toMatchObject({ phase: "play", level: 1, attempt: 2 });
+  });
+
+  test("the arrow keys walk over the planets of the map and stop at the ends", () => {
+    const map = start(1, "de-1");
+    expect(press(map, "ArrowRight").chapter).toBe(2);
+    expect(press(map, "ArrowDown").chapter).toBe(7);
+    expect(press(map, "ArrowLeft")).toBe(map);
+    expect(press(map, "ArrowUp")).toBe(map);
+    expect(press(start(1, "de-12"), "ArrowRight").chapter).toBe(12);
+    expect(press(map, "4").level).toBe(4);
+  });
+
+  test("a wrong key is remembered for the keyboard", () => {
+    expect(press(firstComet("de-1", 1), "x").lastKey).toBe("x");
   });
 });
