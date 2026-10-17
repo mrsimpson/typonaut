@@ -7,11 +7,28 @@ import { announce, prefersReducedMotion } from "@lernapps/tooling/a11y";
 import { translator, type Messages, type Params } from "@lernapps/tooling/i18n";
 import type { Input } from "@lernapps/app-templates/interactive";
 import { COURSES, fingerOf, shiftHand } from "../core/course.ts";
-import { LEVELS, positionOf, type State } from "../core/index.ts";
+import { LEVELS, pace, positionOf, waveOf, type Level, type State } from "../core/index.ts";
 import de from "../messages/de.json";
 import en from "../messages/en.json";
 import Keyboard from "./Keyboard.vue";
-import { loadProgress, saveResult, starsOf, type Progress } from "./progress.ts";
+import {
+  SHIPS,
+  bestOf,
+  loadProgress,
+  loadShip,
+  loadSound,
+  loadStreak,
+  recommended,
+  saveResult,
+  saveShip,
+  saveSound,
+  starsOf,
+  totalDust,
+  touchStreak,
+  unlocked,
+  type Progress,
+} from "./progress.ts";
+import { setSound, sounds } from "./sound.ts";
 
 const props = defineProps<{ state: State; lang: string }>();
 const emit = defineEmits<{ input: [input: Input] }>();
@@ -21,6 +38,9 @@ const t = computed<(key: string, params?: Params) => string>(() =>
 
 const progress = ref<Progress>({});
 const reduced = ref(false);
+const streak = ref(0);
+const soundOn = ref(true);
+const shipId = ref("classic");
 /** In a round Tab must not move the focus to a link: the shell gives no key to a focused link or button. */
 const keepFocusOut = (event: KeyboardEvent): void => {
   if (props.state.phase === "play" && event.key === "Tab") event.preventDefault();
@@ -28,7 +48,17 @@ const keepFocusOut = (event: KeyboardEvent): void => {
 onMounted(() => {
   progress.value = loadProgress();
   reduced.value = prefersReducedMotion();
+  streak.value = loadStreak();
+  soundOn.value = loadSound();
+  setSound(soundOn.value);
+  shipId.value = loadShip();
   document.addEventListener("keydown", keepFocusOut);
+  // a returning learner finds the map at the next mission, not at chapter 1
+  const next = recommended(progress.value, props.state.course);
+  if (props.state.phase === "menu" && props.state.attempt === 0) {
+    if (next.chapter !== props.state.chapter) emit("input", { kind: "action", name: "chapter", value: next.chapter });
+    if (next.level !== props.state.level) emit("input", { kind: "action", name: "level", value: next.level });
+  }
 });
 onBeforeUnmount(() => document.removeEventListener("keydown", keepFocusOut));
 /** Moves the focus off the clicked button, so that the keys 1, 2, 3 and Enter reach the game again. */
@@ -37,7 +67,25 @@ const release = (event: Event): void => {
 };
 
 const course = computed(() => COURSES[props.state.course]);
-const levels = [1, 2, 3] as const;
+const levels = [1, 2, 3, 4] as const;
+const mission = computed(() => recommended(progress.value, props.state.course));
+const ship = computed(() => SHIPS.find((other) => other.id === shipId.value) ?? SHIPS[0]);
+const dustTotal = computed(() => totalDust(progress.value));
+const chooseShip = (id: string, event: Event): void => {
+  shipId.value = id;
+  saveShip(id);
+  release(event);
+};
+const toggleSound = (event: Event): void => {
+  soundOn.value = !soundOn.value;
+  setSound(soundOn.value);
+  saveSound(soundOn.value);
+  if (soundOn.value) sounds.key();
+  release(event);
+};
+/** What stands under a planet: the keys of the chapter, short. */
+const shortKeys = (chapter: number, keys: string): string =>
+  chapter === 1 ? t.value("shortHome") : chapter === 2 ? t.value("shortCaps") : keys.split("").join("");
 const routeOf = (courseId: string, chapter: number): string => `${courseId}-${chapter}`;
 const chapterTitle = (chapter: number, keys: string): string =>
   chapter === 1 ? t.value("chapterHome") : chapter === 2 ? t.value("chapterCapitals") : keys.split("").join(" ");
@@ -78,7 +126,7 @@ const toggleFullscreen = (event: Event): void => {
   release(event);
   switchFullscreen();
 };
-const choose = (level: 1 | 2 | 3, event: Event): void => {
+const choose = (level: Level, event: Event): void => {
   emit("input", { kind: "action", name: "level", value: level });
   release(event);
 };
@@ -108,8 +156,7 @@ const knownKeys = computed(() =>
     .map((char) => course.value.layout.shifted[char] ?? char)
     .join(""),
 );
-const legend = computed(() => ["lp", "lr", "lm", "li"].map((id) => t.value(`legend.${id}`)));
-const pickedWord = computed(() => props.state.comets.find((comet) => comet.id === props.state.target)?.word ?? "");
+const legend = computed(() => ["lp", "lr", "lm", "li", "thumb"].map((id) => t.value(`legend.${id}`)));
 /** Earlier places of a comet on its arc, to draw its tail. */
 const tail = (id: number): { x: number; y: number; n: number }[] => {
   const comet = props.state.comets.find((other) => other.id === id);
@@ -118,6 +165,14 @@ const tail = (id: number): { x: number; y: number; n: number }[] => {
     .filter((n) => props.state.time - n * 160 >= comet.born)
     .map((n) => ({ ...positionOf(comet, props.state.time - n * 160), n }));
 };
+
+/** What the green button of a won level does: the next level, after level 3 the next chapter. */
+const nextLabel = computed(() =>
+  props.state.level < 3
+    ? t.value("nextLevel", { level: props.state.level + 1 })
+    : t.value("nextChapter", { chapter: props.state.chapter + 1 }),
+);
+const hasNextChapter = computed(() => props.state.chapter < course.value.chapters.length);
 
 const accuracy = computed(() => {
   const { right, errors } = props.state;
@@ -145,13 +200,53 @@ const trouble = computed(() =>
     }),
 );
 
-const ship = { left: "50%", top: "88%" };
+const shipPlace = { left: "50%", top: "88%" };
 const cometStyle = (id: number): Record<string, string> => {
   const comet = props.state.comets.find((other) => other.id === id);
   if (comet === undefined) return {};
   const { x, y } = positionOf(comet, props.state.time);
   return { left: `${x}%`, top: `${y}%` };
 };
+
+/** The last round's news for the result screen: a new record, the old one, a ship that opened. */
+const news = ref<{ record: boolean; before: number; ship: string }>({ record: false, before: 0, ship: "" });
+const banner = ref("");
+let bannerTimer: ReturnType<typeof setTimeout> | undefined;
+const show = (text: string): void => {
+  banner.value = text;
+  clearTimeout(bannerTimer);
+  bannerTimer = setTimeout(() => (banner.value = ""), 1300);
+};
+onBeforeUnmount(() => clearTimeout(bannerTimer));
+const wave = computed(() => waveOf(props.state.spawned));
+const speed = computed(() => Math.round((props.state.right * 60_000) / Math.max(1000, props.state.time)));
+
+watch(
+  () => [props.state.right, props.state.errors, props.state.destroyed, props.state.missed, props.state.phase] as const,
+  ([right, errors, destroyed, missed, phase], [lastRight, lastErrors, lastDestroyed, lastMissed, lastPhase]) => {
+    if (errors > lastErrors) sounds.error();
+    else if (destroyed > lastDestroyed) sounds.hit(props.state.combo);
+    else if (right > lastRight) sounds.key();
+    if (missed > lastMissed) sounds.miss();
+    if (phase !== lastPhase && phase === "won") sounds.win();
+    if (phase !== lastPhase && phase === "lost") sounds.lose();
+  },
+);
+watch(
+  () => props.state.combo,
+  (combo) => {
+    if (combo > 0 && combo % 5 === 0) {
+      sounds.milestone();
+      show(t.value("comboBanner", { combo }));
+    }
+  },
+);
+watch(wave, (now, before) => {
+  if (props.state.phase === "play" && props.state.level === 4 && now > before) {
+    sounds.milestone();
+    show(t.value("waveBanner", { wave: now }));
+  }
+});
 
 watch(
   () =>
@@ -174,8 +269,14 @@ watch(
       score: state.score,
     };
     if (state.phase === "won" || state.phase === "lost") {
-      progress.value = saveResult(routeOf(state.course, state.chapter), state.level, state.stars, state.score);
-      announce(t.value(state.phase, params));
+      const route = routeOf(state.course, state.chapter);
+      const before = bestOf(progress.value, route, state.level);
+      const dustBefore = totalDust(progress.value);
+      progress.value = saveResult(route, state.level, state.stars, state.score);
+      streak.value = touchStreak();
+      const opened = SHIPS.find((other) => other.dust > dustBefore && other.dust <= totalDust(progress.value));
+      news.value = { record: before > 0 && state.score > before, before, ship: opened?.id ?? "" };
+      announce(t.value(state.phase === "lost" && state.level === 4 ? "lostCollector" : state.phase, params));
     } else if (["menu", "level", "chapter", "start", "destroyed", "missed"].includes(state.last)) {
       announce(
         t.value(state.last === "start" ? "startAnnounce" : state.last === "chapter" ? "menu" : state.last, params),
@@ -187,7 +288,7 @@ watch(
 
 <template>
   <section class="game" :aria-label="t('game')">
-    <div class="screen">
+    <div class="screen" :class="{ playing: state.phase === 'play' }">
       <template v-if="state.phase === 'menu'">
         <header class="marquee">
           <h2 class="logo">TYPONAUT</h2>
@@ -197,6 +298,7 @@ watch(
           }}</a>
         </header>
         <p v-if="needsKeyboard" class="notice" role="note">{{ t("needsKeyboard") }}</p>
+        <p v-if="streak > 0" class="streak">{{ t("streak", { days: streak }) }}</p>
 
         <nav class="planets" :aria-label="t('chapters')">
           <button
@@ -204,11 +306,16 @@ watch(
             :key="chapter.id"
             type="button"
             class="planet"
+            :class="{
+              fog: !unlocked(progress, state.course, chapter.id),
+              next: chapter.id === mission.chapter && mission.level < 4,
+            }"
             :aria-current="chapter.id === state.chapter ? 'true' : undefined"
             :style="{ '--hue': `${(chapter.id * 47) % 360}` }"
             @click="pick(chapter.id, $event)"
           >
             <span class="globe">{{ chapter.id }}</span>
+            <span class="short" aria-hidden="true">{{ shortKeys(chapter.id, chapter.keys) }}</span>
             <span class="stars" :aria-label="t('stars', { n: bestStars(chapter.id) })">{{
               "★".repeat(bestStars(chapter.id)) || "·"
             }}</span>
@@ -223,6 +330,9 @@ watch(
           </p>
           <p v-if="state.chapter < 3" class="keys-title">{{ keysTitle }}</p>
           <p class="record">{{ t("record", { dust: dustOf(routeOf(state.course, state.chapter)) }) }}</p>
+          <p v-if="mission.level < 4 && mission.chapter === state.chapter && mission.level === state.level" class="go">
+            {{ t("nextMission") }}
+          </p>
         </section>
 
         <div class="stages" role="group" :aria-label="t('levels')">
@@ -237,17 +347,46 @@ watch(
           >
             <span class="stage-number">{{ level }}</span>
             <span class="stage-name">{{ t(`level${level}`) }}</span>
-            <span class="stars">{{
+            <span v-if="level < 4" class="stars">{{
               "★".repeat(starsOf(progress, routeOf(state.course, state.chapter), level)) || "☆☆☆"
+            }}</span>
+            <span v-else class="stars">{{
+              t("bestScore", { score: bestOf(progress, routeOf(state.course, state.chapter), 4) })
             }}</span>
           </button>
         </div>
-        <p class="info">{{ t("levelInfo", { words: LEVELS[state.level].total }) }}</p>
+        <p class="info">
+          {{ state.level === 4 ? t("levelInfoCollector") : t("levelInfo", { words: LEVELS[state.level].total }) }}
+        </p>
         <button type="button" class="start" @click="start">{{ t("startButton") }}</button>
         <p class="small">{{ t("keysHelp") }}</p>
+        <div class="hangar" role="group" :aria-label="t('hangar')">
+          <button
+            v-for="other in SHIPS"
+            :key="other.id"
+            type="button"
+            class="hangar-ship"
+            :class="{ chosen: other.id === shipId }"
+            :disabled="other.dust > dustTotal"
+            :aria-pressed="other.id === shipId"
+            :title="other.dust > dustTotal ? t('shipLocked', { dust: other.dust }) : t(`ship.${other.id}`)"
+            @click="chooseShip(other.id, $event)"
+          >
+            <svg viewBox="0 0 24 32" width="20" height="26" aria-hidden="true">
+              <path d="M12 1 L21 24 L12 19 L3 24 Z" :fill="other.body" />
+              <circle cx="12" cy="12" r="3" :fill="other.window" />
+              <path d="M9 22 L12 30 L15 22 Z" :fill="other.flame" />
+            </svg>
+            <span class="sr-only">{{ t(`ship.${other.id}`) }}</span>
+          </button>
+          <span class="small">{{ t("dustTotal", { dust: dustTotal }) }}</span>
+        </div>
         <nav class="meta" :aria-label="t('more')">
           <a :href="startPage">{{ t("info") }}</a>
           <a :href="otherLanguage.href" :lang="otherLanguage.lang">{{ t(`uiLanguage.${otherLanguage.lang}`) }}</a>
+          <button type="button" class="link" :aria-pressed="soundOn" @click="toggleSound">
+            {{ t(soundOn ? "soundOn" : "soundOff") }}
+          </button>
           <button v-if="canFullscreen" type="button" class="link" @click="toggleFullscreen">
             {{ t("fullscreen") }}
           </button>
@@ -256,7 +395,11 @@ watch(
 
       <template v-else-if="state.phase === 'play'">
         <div class="hud" aria-hidden="true">
-          <span>{{ t("where", { chapter: state.chapter, level: state.level }) }}</span>
+          <span v-if="state.level === 4">
+            {{ t("whereCollector", { chapter: state.chapter, wave: wave }) }} ·
+            {{ t("pace", { pace: pace(state.spawned).toFixed(1) }) }}
+          </span>
+          <span v-else>{{ t("where", { chapter: state.chapter, level: state.level }) }}</span>
           <span>{{ t("score", { score: state.score }) }} · {{ t("combo", { combo: state.combo }) }}</span>
         </div>
         <div class="field" :class="{ hurt: state.last === 'missed' && !reduced }" aria-hidden="true">
@@ -290,18 +433,18 @@ watch(
             :style="{ left: `${burst.x}%`, top: `${burst.y}%` }"
             >✦ +{{ burst.points }}</span
           >
-          <svg class="ship" :style="ship" viewBox="0 0 24 32" width="28" height="38">
-            <path d="M12 1 L21 24 L12 19 L3 24 Z" fill="#e8ecff" />
-            <circle cx="12" cy="12" r="3" fill="#6c7bd9" />
-            <path d="M9 22 L12 30 L15 22 Z" fill="#ffd166" />
+          <p v-if="banner !== ''" class="banner" :class="{ still: reduced }">{{ banner }}</p>
+          <svg class="ship" :style="shipPlace" viewBox="0 0 24 32" width="28" height="38">
+            <path d="M12 1 L21 24 L12 19 L3 24 Z" :fill="ship?.body" />
+            <circle cx="12" cy="12" r="3" :fill="ship?.window" />
+            <path d="M9 22 L12 30 L15 22 Z" :fill="ship?.flame" />
           </svg>
         </div>
         <div class="shield" aria-hidden="true">
           <div class="bar"><div class="fill" :style="{ width: `${state.shield}%` }"></div></div>
           <span>{{ t("shield", { shield: state.shield }) }}</span>
         </div>
-        <p v-if="pickedWord !== ''" class="picked-word" aria-hidden="true">{{ t("typing", { word: pickedWord }) }}</p>
-        <p v-if="state.level < 3" class="hint" aria-hidden="true">{{ hint }}</p>
+        <p v-if="state.level < 3" class="hint" aria-hidden="true">{{ hint || "\u00a0" }}</p>
         <Keyboard
           v-if="state.level === 1"
           :layout="course.layout"
@@ -309,18 +452,30 @@ watch(
           :shift-keys="shiftSide"
           :known="knownKeys"
           :legend="legend"
+          :wrong="state.last === 'wrong' ? state.lastKey : ''"
+          :wrong-count="state.errors"
         />
         <p class="small">{{ t("escape") }}</p>
       </template>
 
       <template v-else>
-        <h2 class="result">{{ t(state.phase === "won" ? "wonTitle" : "lostTitle") }}</h2>
-        <p v-if="state.phase === 'lost'">{{ t("lostText") }}</p>
+        <h2 class="result">
+          {{ state.level === 4 ? t("collectorTitle") : t(state.phase === "won" ? "wonTitle" : "lostTitle") }}
+        </h2>
+        <p v-if="news.record" class="record-news">{{ t("newRecord", { before: news.before }) }}</p>
+        <p v-if="state.level === 4" class="small">{{ t("collectorText") }}</p>
+        <p v-else-if="state.phase === 'lost'">{{ t("lostText") }}</p>
         <p v-else class="stars big">{{ "★".repeat(state.stars) }}{{ "☆".repeat(3 - state.stars) }}</p>
         <p v-if="state.phase === 'won'" class="small">{{ t("starsInfo") }}</p>
-        <p>
+        <p v-if="state.level === 4">
+          {{ t("summaryCollector", { destroyed: state.destroyed, wave, accuracy, score: state.score }) }}
+        </p>
+        <p v-else>
           {{ t("summary", { destroyed: state.destroyed, total: state.total, accuracy, score: state.score }) }}
         </p>
+        <p class="small">{{ t("speed", { speed }) }}</p>
+        <p v-if="news.ship !== ''" class="record-news">{{ t("shipOpened", { ship: t(`ship.${news.ship}`) }) }}</p>
+        <p v-if="streak > 0" class="small">{{ t("streak", { days: streak }) }}</p>
         <template v-if="trouble.length > 0">
           <h3>{{ t("troubleTitle") }}</h3>
           <ul class="trouble">
@@ -332,15 +487,20 @@ watch(
         </template>
         <p v-else>{{ t("noTrouble") }}</p>
         <div class="buttons">
-          <button type="button" class="primary" @click="emit('input', { kind: 'action', name: 'again' })">
-            {{ t("again") }}
-          </button>
           <button
-            v-if="state.phase === 'won' && state.level < 3"
+            v-if="state.phase === 'won' && (state.level < 3 || hasNextChapter)"
             type="button"
+            class="primary"
             @click="emit('input', { kind: 'action', name: 'next' })"
           >
-            {{ t("next") }}
+            {{ nextLabel }}
+          </button>
+          <button
+            type="button"
+            :class="{ primary: state.phase !== 'won' }"
+            @click="emit('input', { kind: 'action', name: 'again' })"
+          >
+            {{ t("again") }}
           </button>
           <button type="button" @click="emit('input', { kind: 'action', name: 'menu' })">{{ t("map") }}</button>
         </div>
@@ -361,6 +521,7 @@ body:has(.game) {
 
 <style scoped>
 .game {
+  box-sizing: border-box;
   position: fixed;
   z-index: 1000;
   inset: 0;
@@ -398,6 +559,12 @@ a {
   margin: 0 auto;
 }
 
+/* in a round the field takes what the rest leaves, so that nothing has to scroll */
+.screen.playing {
+  height: 100%;
+  justify-content: flex-start;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -432,7 +599,7 @@ button.link {
 .logo {
   margin: 0;
   color: #5ce1e6;
-  font-size: clamp(2rem, 9vw, 3.5rem);
+  font-size: clamp(2rem, 9vw, 2.8rem);
   letter-spacing: 0.25em;
   text-shadow:
     0 0 0.6rem #5ce1e6aa,
@@ -454,8 +621,8 @@ button.link {
   display: grid;
   grid-template-columns: repeat(6, auto);
   justify-content: center;
-  gap: 0.6rem 1.1rem;
-  margin: 1rem 0;
+  gap: 0.2rem 1.1rem;
+  margin: 0.4rem 0;
 }
 
 .planet {
@@ -554,7 +721,7 @@ button.link {
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.6rem;
-  margin: 0.8rem 0;
+  margin: 0.5rem 0;
 }
 
 button {
@@ -596,6 +763,7 @@ button {
 }
 
 .info {
+  margin: 0.3rem 0;
   text-align: center;
 }
 
@@ -612,7 +780,7 @@ button {
 
 .start {
   display: block;
-  margin: 0.8rem auto;
+  margin: 0.5rem auto;
   padding: 0.7rem 2.5rem;
   border: 3px solid #ffd166;
   border-radius: 2rem;
@@ -636,7 +804,8 @@ button {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .start {
+  .start,
+  .planet.next .globe {
     animation: none;
   }
 }
@@ -674,7 +843,8 @@ button {
 
 .field {
   position: relative;
-  height: min(55vh, 30rem);
+  flex: 1 1 8rem;
+  min-height: 8rem;
   margin: 0.5rem 0;
   border-radius: 0.5rem;
   background:
@@ -709,12 +879,6 @@ button {
   border-radius: 50%;
   background: #8f9bdc;
   transform: translate(-50%, -50%);
-}
-
-.picked-word {
-  margin: 0.4rem 0;
-  color: #ffd166;
-  font-weight: 600;
 }
 
 .field.hurt {
@@ -790,8 +954,108 @@ button {
 }
 
 .hint {
+  min-height: 1.5em;
   margin: 0.5rem 0;
   font-weight: 600;
+}
+
+.banner {
+  position: absolute;
+  top: 18%;
+  left: 50%;
+  margin: 0;
+  color: #ffd166;
+  font-size: clamp(1.4rem, 5vw, 2.6rem);
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 1rem #ffd166aa;
+  transform: translateX(-50%);
+  animation: pop 1.3s ease-out forwards;
+  pointer-events: none;
+}
+
+.banner.still {
+  animation: none;
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.6);
+  }
+
+  20% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.15);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+.streak {
+  margin: 0.2rem 0;
+  color: #ff9d5c;
+  font-weight: 700;
+  text-align: center;
+}
+
+.short {
+  margin-top: 0.25rem;
+  color: #b8c0f0;
+  font-size: 0.7rem;
+  line-height: 1;
+}
+
+.planet.fog .globe {
+  filter: saturate(0.5) brightness(0.8);
+}
+
+.planet.next .globe {
+  animation: beacon 1.6s ease-in-out infinite;
+}
+
+@keyframes beacon {
+  50% {
+    box-shadow: 0 0 1.4rem 0.2rem #ffffffcc;
+  }
+}
+
+.go {
+  margin: 0.2rem 0;
+  color: #4cc9a7;
+  font-weight: 700;
+}
+
+.hangar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  margin: 0.4rem 0;
+}
+
+.hangar-ship {
+  padding: 0.25rem 0.5rem;
+}
+
+.hangar-ship:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.hangar-ship.chosen {
+  border-color: #ffd166;
+  background: #2a2f6b;
+}
+
+.record-news {
+  color: #ffd166;
+  font-size: 1.2rem;
+  font-weight: 800;
 }
 
 .big {

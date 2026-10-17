@@ -8,6 +8,9 @@ import { COURSES, difficulty, parseRoute, type Course } from "./course.ts";
 
 export type Phase = "menu" | "play" | "won" | "lost";
 
+/** Levels 1 to 3 are rounds with a fixed number of comets; level 4, the stardust collector, never ends by itself. */
+export type Level = 1 | 2 | 3 | 4;
+
 /** A word in flight: its arc is fixed by where it starts, the lift of its arc and how long it flies. */
 export interface Comet {
   id: number;
@@ -59,7 +62,7 @@ export interface State {
   chapter: number;
   phase: Phase;
   /** The level selected in the menu, and played. */
-  level: 1 | 2 | 3;
+  level: Level;
   /** How often a level was started: another round of the same level draws other words. */
   attempt: number;
   rng: number;
@@ -84,6 +87,8 @@ export interface State {
   /** Keys typed right and wrong in the level. */
   right: number;
   errors: number;
+  /** The wrong key typed last, to show it on the keyboard. */
+  lastKey: string;
   stats: Record<string, KeyStat>;
   stars: number;
   last: Last;
@@ -101,11 +106,20 @@ interface LevelSettings {
   perLetter: number;
 }
 
-export const LEVELS: Readonly<Record<1 | 2 | 3, LevelSettings>> = {
+export const LEVELS: Readonly<Record<Level, LevelSettings>> = {
   1: { total: 10, maxActive: 1, gap: 1500, base: 8000, perLetter: 1000 },
   2: { total: 10, maxActive: 2, gap: 5000, base: 9000, perLetter: 1200 },
   3: { total: 14, maxActive: 3, gap: 4500, base: 8000, perLetter: 1100 },
+  // the collector: no total, the pace comes from `pace`
+  4: { total: 0, maxActive: 1, gap: 2400, base: 7000, perLetter: 800 },
 };
+
+/** The collector gets faster with every comet: 1 at the start, at most 8; the flights shrink and the gaps with it. */
+export const pace = (spawned: number): number => Math.min(8, 1 + 0.06 * spawned);
+/** The wave of the collector: every ten comets a new one, to give the learner a goal to reach. */
+export const waveOf = (spawned: number): number => Math.floor(Math.max(0, spawned - 1) / 10) + 1;
+const MIN_FLIGHT = 1800;
+const MAX_COLLECTOR_COMETS = 5;
 
 /** The ship the comets fly to, in percent of the playing field. */
 export const SHIP = { x: 50, y: 88 };
@@ -168,6 +182,7 @@ export function start(seed: number, route: string): State {
     missed: 0,
     right: 0,
     errors: 0,
+    lastKey: "",
     stats: {},
     stars: 0,
     last: "menu",
@@ -207,7 +222,8 @@ function nextWord(state: State): string {
   const before = state.chapter > 1 ? wordsOf(state, 1, state.chapter - 1) : own;
   const earlier = wordsOf(state, Math.max(1, state.chapter - 1), Math.max(1, state.chapter - 1));
   let source: string[];
-  if (state.level === 2) source = random(state) < 0.7 ? own : before;
+  if (state.level === 4) source = random(state) < 0.5 ? own : [...before, ...own];
+  else if (state.level === 2) source = random(state) < 0.7 ? own : before;
   else {
     const roll = random(state);
     source = roll < 0.4 ? own : roll < 0.6 ? earlier : [...before, ...own];
@@ -219,7 +235,8 @@ function nextWord(state: State): string {
 function wordForComet(state: State): string {
   for (let tries = 0; ; tries++) {
     const word = state.level === 1 ? sequence(state) : nextWord(state);
-    const taken = state.comets.some((comet) => comet.word[0] === word[0]) || state.used.includes(word.toLowerCase());
+    const repeated = state.level !== 4 && state.used.includes(word.toLowerCase());
+    const taken = state.comets.some((comet) => comet.word[0] === word[0]) || repeated;
     if (!taken || tries >= 20) return word;
   }
 }
@@ -228,7 +245,7 @@ function spawn(state: State): void {
   const word = wordForComet(state);
   state.used.push(word.toLowerCase());
   const settings = LEVELS[state.level];
-  const ramp = 1 - 0.2 * (state.spawned / settings.total);
+  const ramp = state.level === 4 ? 1 / pace(state.spawned) : 1 - 0.2 * (state.spawned / settings.total);
   const chapterFactor = 1 - 0.01 * (state.chapter - 1);
   const fromLeft = random(state) < 0.5;
   state.comets.push({
@@ -236,7 +253,10 @@ function spawn(state: State): void {
     word,
     typed: 0,
     born: state.time,
-    flight: Math.round((settings.base + settings.perLetter * word.length) * ramp * chapterFactor),
+    flight: Math.max(
+      state.level === 4 ? MIN_FLIGHT : 0,
+      Math.round((settings.base + settings.perLetter * word.length) * ramp * chapterFactor),
+    ),
     startX: (fromLeft ? 10 : 90) + (random(state) - 0.5) * 8,
     startY: 40 + random(state) * 20,
     lift: 15 + random(state) * 10,
@@ -257,11 +277,11 @@ export function positionOf(comet: Comet, time: number): { x: number; y: number; 
 }
 
 /** The map of the same course and chapter: a fresh state with what the learner chose kept. */
-function map(state: State, level: 1 | 2 | 3): State {
+function map(state: State, level: Level): State {
   return { ...start(state.seed, state.route), chapter: state.chapter, level, attempt: state.attempt };
 }
 
-function begin(state: State, level: 1 | 2 | 3): State {
+function begin(state: State, level: Level): State {
   const attempt = state.attempt + 1;
   return {
     ...map(state, level),
@@ -318,7 +338,7 @@ function typeKey(state: State, key: string): State {
     next.last = comet.typed === 1 ? "pick" : "hit";
     return next;
   }
-  const factor = 1 + 0.1 * Math.min(next.combo, 10);
+  const factor = 1 + 0.1 * Math.min(next.combo, next.level === 4 ? 30 : 10);
   const points = Math.round(difficulty(comet.word, chapterKeys(next)) * 10 * factor);
   next.score += points;
   const { x, y } = positionOf(comet, next.time);
@@ -331,7 +351,7 @@ function typeKey(state: State, key: string): State {
   next.target = 0;
   next.word = comet.word;
   next.last = "destroyed";
-  if (next.spawned === next.total && next.comets.length === 0) finish(next, "won");
+  if (next.level !== 4 && next.spawned === next.total && next.comets.length === 0) finish(next, "won");
   return next;
 }
 
@@ -340,11 +360,24 @@ function mistake(state: State, expected: string, typed: string, comet?: Comet): 
   stat.errors += 1;
   stat.instead[typed] = (stat.instead[typed] ?? 0) + 1;
   state.errors += 1;
+  state.lastKey = typed;
   state.combo = 0;
   state.last = "wrong";
   if (comet !== undefined) state.word = comet.word;
   damage(state, ERROR_COST);
   return state;
+}
+
+/** The arrow keys on the map: the chapters are planets in rows of six. */
+const MAP_STEPS: Readonly<Record<string, number>> = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -6, ArrowDown: 6 };
+
+/** What comes after a won level: the next level, after level 3 the next chapter on the map, else the map. */
+function nextMission(state: State): State {
+  if (state.level === 4) return begin(state, 4);
+  if (state.level < 3) return begin(state, (state.level + 1) as Level);
+  const chapter = state.chapter + 1;
+  if (chapter > COURSES[state.course].chapters.length) return map(state, 1);
+  return { ...map(state, 1), chapter, last: "chapter" };
 }
 
 /** Whether `input` is the key `name` or the action of that name: the key Enter and the button do the same. */
@@ -362,7 +395,7 @@ export function step(state: State, input: Input): State {
   }
   if (input.kind === "action" && input.name === "level") {
     const level = Number(input.value);
-    if (level !== 1 && level !== 2 && level !== 3) return state;
+    if (level !== 1 && level !== 2 && level !== 3 && level !== 4) return state;
     return { ...state, level, last: "level" };
   }
   if (state.phase === "menu") {
@@ -372,16 +405,20 @@ export function step(state: State, input: Input): State {
       if (!Number.isInteger(chapter) || chapter < 1 || chapter > count) return state;
       return { ...state, chapter, last: "chapter" };
     }
-    if (input.kind === "key" && ["1", "2", "3"].includes(input.key)) {
-      return { ...state, level: Number(input.key) as 1 | 2 | 3, last: "level" };
+    if (input.kind === "key" && ["1", "2", "3", "4"].includes(input.key)) {
+      return { ...state, level: Number(input.key) as Level, last: "level" };
+    }
+    if (input.kind === "key" && input.key in MAP_STEPS) {
+      const chapter = state.chapter + (MAP_STEPS[input.key] ?? 0);
+      if (chapter < 1 || chapter > COURSES[state.course].chapters.length) return state;
+      return { ...state, chapter, last: "chapter" };
     }
     return asks(input, "Enter", "start") ? begin(state, state.level) : state;
   }
   // won or lost
-  const menu = (level: 1 | 2 | 3): State => map(state, level);
-  if (input.kind === "action" && input.name === "next") return menu(Math.min(3, state.level + 1) as 1 | 2 | 3);
-  if (asks(input, "Escape", "menu")) return menu(state.level);
-  if (state.phase === "won" && asks(input, "Enter", "start")) return menu(Math.min(3, state.level + 1) as 1 | 2 | 3);
+  if (input.kind === "action" && input.name === "next") return nextMission(state);
+  if (asks(input, "Escape", "menu")) return map(state, state.level);
+  if (state.phase === "won" && asks(input, "Enter", "start")) return nextMission(state);
   if (asks(input, "Enter", "start") || (input.kind === "action" && input.name === "again"))
     return begin(state, state.level);
   return state;
@@ -406,9 +443,12 @@ export function tick(state: State, dt: number): State {
     damage(next, 8 + comet.word.length);
     if (next.phase !== "play") return next;
   }
+  const collector = next.level === 4;
+  const gap = collector ? Math.max(500, settings.gap / pace(next.spawned)) : settings.gap;
+  const maxActive = collector ? Math.min(MAX_COLLECTOR_COMETS, 1 + Math.floor(next.spawned / 10)) : settings.maxActive;
   const waited = next.time - next.lastSpawn;
-  const ready = next.comets.length === 0 ? waited >= RESPAWN_PAUSE : waited >= settings.gap;
-  if (next.spawned < next.total && next.comets.length < settings.maxActive && ready) spawn(next);
-  else if (next.spawned === next.total && next.comets.length === 0) finish(next, "won");
+  const ready = next.comets.length === 0 ? waited >= RESPAWN_PAUSE : waited >= gap;
+  if ((collector || next.spawned < next.total) && next.comets.length < maxActive && ready) spawn(next);
+  else if (!collector && next.spawned === next.total && next.comets.length === 0) finish(next, "won");
   return next;
 }
