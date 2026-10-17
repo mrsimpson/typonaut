@@ -115,7 +115,7 @@ export const LEVELS: Readonly<Record<Level, LevelSettings>> = {
 };
 
 /** The collector gets faster with every comet: 1 at the start, at most 8; the flights shrink and the gaps with it. */
-export const pace = (spawned: number): number => Math.min(8, 1 + 0.06 * spawned);
+export const pace = (spawned: number): number => Math.min(8, 1 + 0.03 * spawned);
 /** The wave of the collector: every ten comets a new one, to give the learner a goal to reach. */
 export const waveOf = (spawned: number): number => Math.floor(Math.max(0, spawned - 1) / 10) + 1;
 const MIN_FLIGHT = 1800;

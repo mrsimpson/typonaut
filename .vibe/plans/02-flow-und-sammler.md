@@ -42,7 +42,7 @@ zentrierte Tastatur und können im Sammler-Modus (Level 4) mit immer schnelleren
 
 ## Key decisions
 
-- Level 4 "Sammler": unendlich viele Kometen, das Tempo steigt mit jedem Kometen (bis ×8), Ende nur durch ein leeres Schild; der Rekord wird gespeichert. (guess)
+- Level 4 "Sammler": unendlich viele Kometen, das Tempo steigt mit jedem Kometen um 3 % (bis ×8; zuerst 6 %, nach dem Spielen zu steil), Ende nur durch ein leeres Schild; der Rekord wird gespeichert. (guess)
 - Weiter nach einem gewonnenen Level startet das nächste Level sofort; nach Level 3 öffnet sich die Karte beim nächsten Kapitel.
 - Kapitel bleiben spielbar, auch wenn sie im "Nebel" liegen: der Nebel zeigt nur den empfohlenen Weg. (guess)
 - Ton mit Web Audio, ohne Dateien, abschaltbar. Serie (Tage in Folge), Raumschiffe und Rekorde nur auf dem Gerät.
