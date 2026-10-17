@@ -311,15 +311,15 @@ after the push (`gh run list --workflow Pages --branch main --commit <commit>` l
       shows the app. Take that address, never one you derive: a repo whose owner has its own domain is served there,
       and its github.io address only redirects to it. The job ends only once the app answers at that address, so do
       not wait for it yourself; when you open an address, follow its redirects.
-- [ ] Load the skill `lernapps-listing`.
-- [ ] Complete the entry draft with what is known now, such as the app's address.
-- [ ] **Checkpoint:** list. Ask the creator before you open the listing pull request, and wait for their yes.
-- [ ] Fill the retrospective.
-- [ ] Commit this plan on `main` and push it: the listing check and the review read it, with the filled
+- [x] Load the skill `lernapps-listing`.
+- [x] Complete the entry draft with what is known now, such as the app's address.
+- [x] **Checkpoint:** list. Ask the creator before you open the listing pull request, and wait for their yes.
+- [x] Fill the retrospective.
+- [x] Commit this plan on `main` and push it: the listing check and the review read it, with the filled
       retrospective, in the repo. A push that changes only `.vibe/` publishes nothing again.
-- [ ] Open the listing pull request as the skill says, and see it through to "bestanden": when the check passes, the
+- [x] Open the listing pull request as the skill says (https://github.com/lernapps/apps/pull/46, results comment "bestanden"; lernapps.net's decision is awaited), and see it through to "bestanden": when the check passes, the
       results comment on the pull request says "bestanden" (not "nicht bestanden").
-- [ ] If this plan changed since its last push, commit it on `main` and push it again.
+- [x] If this plan changed since its last push, commit it on `main` and push it again.
 
 ### Completed
 
@@ -332,7 +332,7 @@ it with the listing; the evals compare it across runs. It stays in the creator's
 
 ### Phases reached
 
-commit (published); research, plan and publish confirmed. The listing checkpoint is not passed yet.
+commit (published and listed); research, plan, publish and list confirmed. The listing pull request says "bestanden"; the decision of lernapps.net is open.
 
 ### Failed checks
 
@@ -345,7 +345,7 @@ Leave out the failed pre-push runs: the hook counts them in the front matter.
 
 ### Creator turns after the plan
 
-5: build it on its own and have an agent playtest it; the repo is renamed; Pages cannot be switched before the branch exists; the level choice must feel like an arcade game; Pages is switched.
+8: build it on its own and have an agent playtest it; the repo is renamed; Pages cannot be switched before the branch exists; the level choice must feel like an arcade game; Pages is switched; the start page lists no chapters and the map is full screen; touch devices (the app is for physical keyboards); list it.
 
 ### Where I had to guess
 
@@ -354,4 +354,4 @@ Each place where this plan, a skill, a message or the creator's answers did not 
 chose. Write "None" if there was none.
 -->
 
-No locked levels (the core cannot read the device); word lists written by the assistant and spread over chapters by a script; fingers of y, ß, - and ? (German) and z, ', ? and - (English) from the usual charts, not from a source; the pace of levels 2 and 3 from a bot playtest at a child's tempo; Ersteller shown as "mrsimpson" in the entry; the README added so that a push publishes (a push of only `.vibe/` does not); `ARC42_CONSISTENT` used after review; the creator's "publish" yes was read from the rename and the wish to switch Pages.
+No locked levels (the core cannot read the device); word lists written by the assistant and spread over chapters by a script; fingers of y, ß, - and ? (German) and z, ', ? and - (English) from the usual charts, not from a source; the pace of levels 2 and 3 from a bot playtest at a child's tempo; Ersteller shown as "mrsimpson" in the entry; the README added so that a push publishes (a push of only `.vibe/` does not); `ARC42_CONSISTENT` used after review; the app's touch decision (a note instead of an on-screen keyboard input) was taken on the assistant's recommendation; the creator's "publish" yes was read from the rename and the wish to switch Pages.
