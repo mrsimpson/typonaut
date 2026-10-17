@@ -633,6 +633,74 @@ protocol: TypeScript module exports
 ```
 
 <!-- app: begin core -->
+
+### Game rules
+
+The comets and the rules live in `index.ts`: the three levels, the flight arcs, picking a comet by its first letter, the
+shield, the score with its combo and the stars. It draws everything from the seed. Unit tests sit next to it.
+
+```arc42
+:::diagram
+id: building-blocks-game-core
+view: building-block
+notation: mermaid
+:::
+```
+
+```mermaid
+flowchart TB
+    subgraph bb-interactive-core["Core"]
+        bb-game-rules["Game rules"]
+        bb-course-lookup["Course lookup"]
+    end
+    bb-interactive-data["Data"]
+    bb-game-rules -->|"if-course-lookup"| bb-course-lookup
+    bb-course-lookup -->|"if-interactive-data"| bb-interactive-data
+```
+
+```arc42
+:::building-block
+id: bb-game-rules
+title: Game rules
+parent: bb-interactive-core
+technology: TypeScript
+path: src/core/index.ts
+requires: if-course-lookup
+implements: concept-core-and-shell, concept-determinism, concept-picked-comet, concept-slow-start
+:::
+```
+
+### Course lookup
+
+`course.ts` finds the course and chapter of a route, the finger of a key, the hand that presses Shift and the difficulty
+of a word, so that the UI can use them without touching the rules.
+
+```arc42
+:::building-block
+id: bb-course-lookup
+title: Course lookup
+parent: bb-interactive-core
+technology: TypeScript
+path: src/core/course.ts
+requires: if-interactive-data
+implements: concept-course-data
+:::
+```
+
+#### Course lookup interface
+
+The game rules and the game view ask the lookup for the course of a route, the finger of a key and the difficulty of a word.
+
+```arc42
+:::interface
+id: if-course-lookup
+title: COURSES, parseRoute, fingerOf, shiftHand, difficulty
+provider: bb-course-lookup
+protocol: TypeScript imports
+path: src/core/course.ts
+:::
+```
+
 <!-- app: end core -->
 
 ## UI
@@ -668,6 +736,106 @@ protocol: Vue props and events
 ```
 
 <!-- app: begin ui -->
+
+### Game view
+
+The root component shows the map of chapters and levels, the field with the comets, the shield and the result with the
+analysis, and turns clicks into actions. It saves the result of a round through the progress module.
+
+```arc42
+:::diagram
+id: building-blocks-ui
+view: building-block
+notation: mermaid
+:::
+```
+
+```mermaid
+flowchart TB
+    subgraph bb-interactive-ui["UI"]
+        bb-game-view["Game view"]
+        bb-keyboard-view["Keyboard view"]
+        bb-progress["Progress"]
+    end
+    bb-tooling["Tooling helpers"]
+    bb-game-view -->|"if-keyboard-view"| bb-keyboard-view
+    bb-game-view -->|"if-progress"| bb-progress
+    bb-progress -->|"if-device-storage"| bb-tooling
+```
+
+```arc42
+:::building-block
+id: bb-game-view
+title: Game view
+parent: bb-interactive-ui
+technology: Vue single-file component
+path: src/ui/App.vue
+requires: if-a11y, if-translator, if-messages, if-keyboard-view, if-progress, if-course-lookup
+implements: concept-accessibility, concept-low-stimulation, concept-picked-comet
+:::
+```
+
+### Keyboard view
+
+The keyboard component draws the layout with the fingers in colour and the key to type next. It is a hint of the first
+level only.
+
+```arc42
+:::building-block
+id: bb-keyboard-view
+title: Keyboard view
+parent: bb-interactive-ui
+technology: Vue single-file component
+path: src/ui/Keyboard.vue
+implements: concept-component-rules
+:::
+```
+
+#### Keyboard view interface
+
+The game view gives the keyboard the layout, the key to type next and the side of the Shift key to press.
+
+```arc42
+:::interface
+id: if-keyboard-view
+title: Keyboard component (layout, next, shift-keys)
+provider: bb-keyboard-view
+protocol: Vue props
+path: src/ui/Keyboard.vue
+:::
+```
+
+### Progress
+
+The progress module keeps the stars of each level and the stardust of each chapter on the device and hands them to the
+game view.
+
+```arc42
+:::building-block
+id: bb-progress
+title: Progress
+parent: bb-interactive-ui
+technology: TypeScript
+path: src/ui/progress.ts
+requires: if-device-storage
+implements: concept-device-storage
+:::
+```
+
+#### Progress interface
+
+The game view loads the progress when it is mounted and saves the result of each round.
+
+```arc42
+:::interface
+id: if-progress
+title: loadProgress, saveResult, starsOf
+provider: bb-progress
+protocol: TypeScript imports
+path: src/ui/progress.ts
+:::
+```
+
 <!-- app: end ui -->
 
 ## Data
@@ -698,6 +866,83 @@ path: src/data
 ```
 
 <!-- app: begin data -->
+
+### German course
+
+`de.json` holds the German course: the QWERTZ layout (rows, shifted keys, the finger of each key) and twelve chapters
+with their keys and words. A word may use only keys introduced up to its chapter; the unit tests check it.
+
+```arc42
+:::diagram
+id: building-blocks-data
+view: building-block
+notation: mermaid
+:::
+```
+
+```mermaid
+flowchart TB
+    subgraph bb-interactive-data["Data"]
+        bb-course-de["German course"]
+        bb-course-en["English course"]
+    end
+```
+
+```arc42
+:::building-block
+id: bb-course-de
+title: German course
+parent: bb-interactive-data
+technology: JSON
+path: src/data/de.json
+implements: concept-course-data
+:::
+```
+
+#### German course interface
+
+The lookup imports the German course as a JSON module, so it is bundled and checked with the core.
+
+```arc42
+:::interface
+id: if-course-de
+title: de.json (JSON import)
+provider: bb-course-de
+protocol: JSON module import
+path: src/data/de.json
+:::
+```
+
+### English course
+
+`en.json` is the same for English: the QWERTY layout and twelve chapters with English words. A chapter, a word or a
+language is added by changing data.
+
+```arc42
+:::building-block
+id: bb-course-en
+title: English course
+parent: bb-interactive-data
+technology: JSON
+path: src/data/en.json
+implements: concept-course-data
+:::
+```
+
+#### English course interface
+
+The lookup imports the English course as a JSON module, so it is bundled and checked with the core.
+
+```arc42
+:::interface
+id: if-course-en
+title: en.json (JSON import)
+provider: bb-course-en
+protocol: JSON module import
+path: src/data/en.json
+:::
+```
+
 <!-- app: end data -->
 
 ## Messages

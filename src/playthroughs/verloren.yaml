@@ -1,0 +1,55 @@
+# yaml-language-server: $schema=../../node_modules/@lernapps/app-templates/runtime/interactive/playthrough.v1.schema.json
+# Chapter 1, level 1: 34 wrong keys empty the shield and lose the level; another try starts a new round of the same level
+# (attempt 2), Esc leads back to the map with the level kept.
+route: de-1
+seed: 1
+steps:
+  - keys: ["Enter"]
+    ticks: 40
+    state: { phase: play, attempt: 1 }
+  - keys:
+      [
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+      ]
+    state: { phase: play, shield: 1, errors: 33 }
+  - keys: ["x"]
+    state: { phase: lost, shield: 0, errors: 34, stars: 0, last: lost }
+    announce: "Das Schild ist leer. Nochmal versuchen?"
+  - inputs: [{ kind: action, name: again }]
+    state: { phase: play, attempt: 2, shield: 100, errors: 0, level: 1 }
+    announce: "Level 1 beginnt. Tippe die fliegenden Wörter ab."
+  - keys: ["Escape"]
+    state: { phase: menu, attempt: 2, level: 1, last: menu }
+    announce: "Kapitel 1. Wähle ein Level."

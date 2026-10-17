@@ -174,4 +174,46 @@ category: navigation
 ```
 
 <!-- app: begin -->
+
+## The picked comet
+
+The first letter typed picks the oldest comet that starts with it, and that comet stays picked until its last letter,
+so a key that would start another word is a mistake and costs energy. Each right letter colours the comet's tail.
+Children can finish a word without searching for it on the screen.
+
+```arc42
+:::concept
+id: concept-picked-comet
+title: The picked comet
+category: interaction
+:::
+```
+
+## Slow start, accuracy before speed
+
+Comets fly slowly, at most three at a time and with a pause between them; the first level of a chapter shows the
+keyboard with the finger of the next key, the second only the key in words, the third nothing. Mistakes cost more
+than a late word is worth, so careful typing pays. The tempo rises a little within a level and with the chapters.
+
+```arc42
+:::concept
+id: concept-slow-start
+title: Slow start, accuracy before speed
+category: didactics
+:::
+```
+
+## Course data
+
+A course is a language with its keyboard layout: the keys of each chapter, the finger of each key and the words that can
+be typed with the keys known by then. The game takes everything it shows and draws from these files.
+
+```arc42
+:::concept
+id: concept-course-data
+title: Course data per language and layout
+category: content
+:::
+```
+
 <!-- app: end -->

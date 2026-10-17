@@ -194,4 +194,33 @@ hosts: bb-shell, bb-interactive-core, bb-interactive-ui, bb-interactive-data, bb
 ```
 
 <!-- app: begin -->
+
+## Typonaut in the build
+
+The leaf blocks of the app are built and tested in the interactive build.
+
+```arc42
+:::deployment-node
+id: dn-typonaut-build
+title: Typonaut in the build
+type: container
+parent: dn-interactive-build
+hosts: bb-game-rules, bb-course-lookup, bb-game-view, bb-keyboard-view, bb-progress, bb-course-de, bb-course-en
+:::
+```
+
+## Typonaut on the app page
+
+The same blocks run in the learner's browser on the app page.
+
+```arc42
+:::deployment-node
+id: dn-typonaut-page
+title: Typonaut on the app page
+type: container
+parent: dn-interactive-app-page
+hosts: bb-game-rules, bb-course-lookup, bb-game-view, bb-keyboard-view, bb-progress, bb-course-de, bb-course-en
+:::
+```
+
 <!-- app: end -->

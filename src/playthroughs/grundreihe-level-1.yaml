@@ -1,0 +1,51 @@
+# yaml-language-server: $schema=../../node_modules/@lernapps/app-templates/runtime/interactive/playthrough.v1.schema.json
+# Chapter 1 of the German course, level 1: ten runs of keys of the home row (a seed whose runs have no ö: the end-to-end tests type on a US keyboard), each typed as soon as it appears; the level is won.
+route: de-1
+seed: 36
+steps:
+  - keys: ["1"]
+    state: { level: 1, phase: menu }
+    announce: Level 1 gewählt.
+  - keys: ["Enter"]
+    ticks: 40
+    state: { phase: play, level: 1, spawned: 1 }
+    announce: "Level 1 beginnt. Tippe die fliegenden Wörter ab."
+  - keys: ["a", "l", "f", "a"]
+    ticks: 40
+    state: { spawned: 2 }
+    announce: "alfa getroffen. Schild 100 Prozent."
+  - keys: ["l", "k", "d"]
+    ticks: 40
+    state: { spawned: 3 }
+    announce: "lkd getroffen. Schild 100 Prozent."
+  - keys: ["l", "l", "d", "d"]
+    ticks: 40
+    state: { spawned: 4 }
+    announce: "lldd getroffen. Schild 100 Prozent."
+  - keys: ["l", "f"]
+    ticks: 40
+    state: { spawned: 5 }
+    announce: "lf getroffen. Schild 100 Prozent."
+  - keys: ["d", "k"]
+    ticks: 40
+    state: { spawned: 6 }
+    announce: "dk getroffen. Schild 100 Prozent."
+  - keys: ["s", "k"]
+    ticks: 40
+    state: { spawned: 7 }
+    announce: "sk getroffen. Schild 100 Prozent."
+  - keys: ["d", "f"]
+    ticks: 40
+    state: { spawned: 8 }
+    announce: "df getroffen. Schild 100 Prozent."
+  - keys: ["l", "a"]
+    ticks: 40
+    state: { spawned: 9 }
+    announce: "la getroffen. Schild 100 Prozent."
+  - keys: ["l", "k", "l"]
+    ticks: 40
+    state: { spawned: 10 }
+    announce: "lkl getroffen. Schild 100 Prozent."
+  - keys: ["s", "j", "a", "d"]
+    state: { phase: won, destroyed: 10, errors: 0, stars: 3, score: 1203, last: won }
+    announce: "Geschafft! 3 von 3 Sternen, 1.203 Sternenstaub."

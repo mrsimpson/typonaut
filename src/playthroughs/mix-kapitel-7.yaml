@@ -1,0 +1,83 @@
+# yaml-language-server: $schema=../../node_modules/@lernapps/app-templates/runtime/interactive/playthrough.v1.schema.json
+# Chapter 7 (w o), level 3: three comets at a time, words of this and earlier chapters.
+route: de-7
+seed: 7
+steps:
+  - keys: ["3"]
+    state: { level: 3, phase: menu }
+    announce: Level 3 gewählt.
+  - keys: ["Enter"]
+    ticks: 40
+    state: { phase: play, level: 3, spawned: 1 }
+    announce: "Level 3 beginnt. Tippe die fliegenden Wörter ab."
+  - keys: ["R", "a", "t"]
+    ticks: 40
+    state: { spawned: 2 }
+    announce: "Rat getroffen. Schild 100 Prozent."
+  - keys: ["S", "t", "u", "h", "l"]
+    ticks: 40
+    state: { spawned: 3 }
+    announce: "Stuhl getroffen. Schild 100 Prozent."
+  - keys: ["R", "o", "s", "e"]
+    ticks: 40
+    state: { spawned: 4 }
+    announce: "Rose getroffen. Schild 100 Prozent."
+  - keys: ["R", "a", "k", "e", "t", "e"]
+    ticks: 40
+    state: { spawned: 5 }
+    announce: "Rakete getroffen. Schild 100 Prozent."
+  - keys: ["K", "l", "a", "s", "s", "e"]
+    ticks: 40
+    state: { spawned: 6 }
+    announce: "Klasse getroffen. Schild 100 Prozent."
+  - keys: ["L", "i", "e", "d", "e", "r"]
+    ticks: 40
+    state: { spawned: 7 }
+    announce: "Lieder getroffen. Schild 100 Prozent."
+  - keys: ["T", "r", "a", "k", "t", "o", "r"]
+    ticks: 40
+    state: { spawned: 8 }
+    announce: "Traktor getroffen. Schild 100 Prozent."
+  - keys: ["L", "i", "l", "a"]
+    ticks: 40
+    state: { spawned: 9 }
+    announce: "Lila getroffen. Schild 100 Prozent."
+  - keys: ["G", "a", "s", "t"]
+    ticks: 40
+    state: { spawned: 10 }
+    announce: "Gast getroffen. Schild 100 Prozent."
+  - keys: ["W", "o", "l", "f"]
+    ticks: 40
+    state: { spawned: 11 }
+    announce: "Wolf getroffen. Schild 100 Prozent."
+  - keys: ["T", "e", "i", "g"]
+    ticks: 40
+    state: { spawned: 12 }
+    announce: "Teig getroffen. Schild 100 Prozent."
+  - keys: ["F", "o", "t", "o"]
+    ticks: 40
+    state: { spawned: 13 }
+    announce: "Foto getroffen. Schild 100 Prozent."
+  - keys: ["W", "a", "r", "z", "e"]
+    ticks: 40
+    state: { spawned: 14 }
+    announce: "Warze getroffen. Schild 100 Prozent."
+  - keys: ["L", "a", "u", "t"]
+    ticks: 40
+    state: { spawned: 15 }
+    announce: "Laut getroffen. Schild 100 Prozent."
+  - keys: ["F", "e", "d", "e", "r"]
+    ticks: 40
+    state: { spawned: 16 }
+    announce: "Feder getroffen. Schild 100 Prozent."
+  - keys: ["R", "o", "s", "t"]
+    ticks: 40
+    state: { spawned: 17 }
+    announce: "Rost getroffen. Schild 100 Prozent."
+  - keys: ["K", "i", "l", "o"]
+    ticks: 40
+    state: { spawned: 18 }
+    announce: "Kilo getroffen. Schild 100 Prozent."
+  - keys: ["W", "i", "e", "g", "e"]
+    state: { phase: won, destroyed: 18, errors: 0, stars: 3, score: 2090, last: won }
+    announce: "Geschafft! 3 von 3 Sternen, 2.090 Sternenstaub."

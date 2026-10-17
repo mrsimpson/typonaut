@@ -1,0 +1,51 @@
+# yaml-language-server: $schema=../../node_modules/@lernapps/app-templates/runtime/interactive/playthrough.v1.schema.json
+# Chapter 1 of the English course, level 1: runs of the home row of the QWERTY layout, with the semicolon.
+route: en-1
+seed: 1
+steps:
+  - keys: ["1"]
+    state: { level: 1, phase: menu }
+    announce: Level 1 gewählt.
+  - keys: ["Enter"]
+    ticks: 40
+    state: { phase: play, level: 1, spawned: 1 }
+    announce: "Level 1 beginnt. Tippe die fliegenden Wörter ab."
+  - keys: ["s", "l", "k"]
+    ticks: 40
+    state: { spawned: 2 }
+    announce: "slk getroffen. Schild 100 Prozent."
+  - keys: [";", "d"]
+    ticks: 40
+    state: { spawned: 3 }
+    announce: ";d getroffen. Schild 100 Prozent."
+  - keys: ["k", "s", "s", "a"]
+    ticks: 40
+    state: { spawned: 4 }
+    announce: "kssa getroffen. Schild 100 Prozent."
+  - keys: [";", "f", "s", ";"]
+    ticks: 40
+    state: { spawned: 5 }
+    announce: ";fs; getroffen. Schild 100 Prozent."
+  - keys: ["f", "a", ";"]
+    ticks: 40
+    state: { spawned: 6 }
+    announce: "fa; getroffen. Schild 100 Prozent."
+  - keys: ["s", "l", "a"]
+    ticks: 40
+    state: { spawned: 7 }
+    announce: "sla getroffen. Schild 100 Prozent."
+  - keys: ["l", "k", "a", "f"]
+    ticks: 40
+    state: { spawned: 8 }
+    announce: "lkaf getroffen. Schild 100 Prozent."
+  - keys: ["a", "a"]
+    ticks: 40
+    state: { spawned: 9 }
+    announce: "aa getroffen. Schild 100 Prozent."
+  - keys: [";", "k", ";", "a"]
+    ticks: 40
+    state: { spawned: 10 }
+    announce: ";k;a getroffen. Schild 100 Prozent."
+  - keys: [";", "d", "k"]
+    state: { phase: won, destroyed: 10, errors: 0, stars: 3, score: 1398, last: won }
+    announce: "Geschafft! 3 von 3 Sternen, 1.398 Sternenstaub."

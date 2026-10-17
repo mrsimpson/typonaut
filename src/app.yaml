@@ -1,28 +1,235 @@
 # yaml-language-server: $schema=../node_modules/@lernapps/app-templates/runtime/interactive/interactive.v1.schema.json
-title: Buchstaben tippen
-description: |
-  Ein Buchstabe erscheint, du tippst ihn auf der Tastatur. Für jeden hast du fünf Sekunden.
-  Zum Üben der Grundreihe und der oberen Reihe, ab Klasse 3.
-howto: |
-  - Tippe den Buchstaben, der groß in der Mitte steht.
-  - Richtig getippt gibt einen Punkt, und der nächste Buchstabe kommt.
-  - Ein falscher Buchstabe oder zu langes Warten zählt als Fehler.
-  - Nach zehn Buchstaben ist die Runde vorbei. Mit Enter spielst du die nächste.
+title:
+  de: Typonaut
+  en: Typonaut
+description:
+  de: |
+    Lerne das Zehnfingersystem auf einer Reise durch den Weltraum. Kometen mit Wörtern fliegen auf dein Raumschiff zu.
+    Tippe sie ab, bevor sie ankommen. Mit jedem Kapitel kommen neue Tasten dazu, von der Grundreihe bis zur ganzen
+    Tastatur. Für Kinder ab Klasse 3 und alle, die richtig tippen lernen wollen. Du brauchst eine Tastatur.
+  en: |
+    Learn touch typing on a journey through space. Comets with words fly towards your spaceship. Type them before they
+    arrive. Every chapter adds new keys, from the home row to the whole keyboard. For children from grade 3 and anyone
+    who wants to learn to type properly. You need a keyboard.
+howto:
+  de: |
+    - Wähle einen Kurs: Deutsch mit deutscher oder Englisch mit englischer Tastatur.
+    - Lege die Finger auf die Grundreihe: links a s d f, rechts j k l ö. Auf f und j fühlst du kleine Erhebungen.
+    - Der erste Buchstabe wählt den Kometen. Tippe das ganze Wort, dann zerfällt er zu Sternenstaub.
+    - Ein falscher Buchstabe und ein Komet, der ankommt, kosten Energie vom Schutzschild. Ist es leer, versuchst du das Level nochmal.
+    - Schau nicht auf die Tastatur. Tippe langsam und genau, das Tempo kommt von allein.
+  en: |
+    - Choose a course: German with a German keyboard or English with an English keyboard.
+    - Put your fingers on the home row: left a s d f, right j k l and the semicolon. You can feel small bumps on f and j.
+    - The first letter picks the comet. Type the whole word and it turns into stardust.
+    - A wrong letter and a comet that arrives cost energy from the shield. When it is empty, you try the level again.
+    - Do not look at the keyboard. Type slowly and carefully, speed will come by itself.
 competencies:
-  - Ich kann die Buchstaben der Grundreihe auf der Tastatur finden.
-  - Ich kann die Buchstaben der oberen Reihe tippen.
-languages: [de]
+  - de: Ich kann meine Finger in die Grundstellung legen und die Grundreihe tippen, ohne zu schauen.
+    en: I can put my fingers in the home position and type the home row without looking.
+  - de: Ich kann Großbuchstaben mit der Umschalttaste der anderen Hand tippen.
+    en: I can type capital letters with the Shift key of the other hand.
+  - de: Ich kann jede Taste der Buchstabenreihen mit dem richtigen Finger tippen.
+    en: I can type every key of the letter rows with the right finger.
+  - de: Ich kann Satzzeichen und Sonderzeichen mit dem richtigen Finger tippen.
+    en: I can type punctuation and special characters with the right finger.
+  - de: Ich kann Wörter fehlerarm abtippen und merke, welche Tasten mir noch schwerfallen.
+    en: I can copy words with few mistakes and notice which keys are still hard for me.
+languages: [de, en]
 routes:
-  - id: grundreihe
-    title: Grundreihe
-    description: a s d f j k l
-  - id: obere-reihe
-    title: Obere Reihe
-    description: q w e r t z u i o p
+  - id: de-1
+    title:
+      de: "Deutsch 1: Grundreihe"
+      en: "German 1: Home row"
+    description:
+      de: "Tasten: a s d f j k l ö"
+      en: "Keys: a s d f j k l ö"
+  - id: de-2
+    title:
+      de: "Deutsch 2: Großbuchstaben"
+      en: "German 2: Capital letters"
+    description:
+      de: "Tasten: A S D F J K L Ö"
+      en: "Keys: A S D F J K L Ö"
+  - id: de-3
+    title:
+      de: "Deutsch 3: g h"
+      en: "German 3: g h"
+    description:
+      de: "Tasten: g h"
+      en: "Keys: g h"
+  - id: de-4
+    title:
+      de: "Deutsch 4: e i"
+      en: "German 4: e i"
+    description:
+      de: "Tasten: e i"
+      en: "Keys: e i"
+  - id: de-5
+    title:
+      de: "Deutsch 5: r u"
+      en: "German 5: r u"
+    description:
+      de: "Tasten: r u"
+      en: "Keys: r u"
+  - id: de-6
+    title:
+      de: "Deutsch 6: t z"
+      en: "German 6: t z"
+    description:
+      de: "Tasten: t z"
+      en: "Keys: t z"
+  - id: de-7
+    title:
+      de: "Deutsch 7: w o"
+      en: "German 7: w o"
+    description:
+      de: "Tasten: w o"
+      en: "Keys: w o"
+  - id: de-8
+    title:
+      de: "Deutsch 8: q p"
+      en: "German 8: q p"
+    description:
+      de: "Tasten: q p"
+      en: "Keys: q p"
+  - id: de-9
+    title:
+      de: "Deutsch 9: b n"
+      en: "German 9: b n"
+    description:
+      de: "Tasten: b n"
+      en: "Keys: b n"
+  - id: de-10
+    title:
+      de: "Deutsch 10: v m"
+      en: "German 10: v m"
+    description:
+      de: "Tasten: v m"
+      en: "Keys: v m"
+  - id: de-11
+    title:
+      de: "Deutsch 11: c x , ."
+      en: "German 11: c x , ."
+    description:
+      de: "Tasten: c x , ."
+      en: "Keys: c x , ."
+  - id: de-12
+    title:
+      de: "Deutsch 12: y ä ü ß ? -"
+      en: "German 12: y ä ü ß ? -"
+    description:
+      de: "Tasten: y ä ü ß ? -"
+      en: "Keys: y ä ü ß ? -"
+  - id: en-1
+    title:
+      de: "Englisch 1: Grundreihe"
+      en: "English 1: Home row"
+    description:
+      de: "Tasten: a s d f j k l ;"
+      en: "Keys: a s d f j k l ;"
+  - id: en-2
+    title:
+      de: "Englisch 2: Großbuchstaben"
+      en: "English 2: Capital letters"
+    description:
+      de: "Tasten: A S D F J K L ;"
+      en: "Keys: A S D F J K L ;"
+  - id: en-3
+    title:
+      de: "Englisch 3: g h"
+      en: "English 3: g h"
+    description:
+      de: "Tasten: g h"
+      en: "Keys: g h"
+  - id: en-4
+    title:
+      de: "Englisch 4: e i"
+      en: "English 4: e i"
+    description:
+      de: "Tasten: e i"
+      en: "Keys: e i"
+  - id: en-5
+    title:
+      de: "Englisch 5: r u"
+      en: "English 5: r u"
+    description:
+      de: "Tasten: r u"
+      en: "Keys: r u"
+  - id: en-6
+    title:
+      de: "Englisch 6: t y"
+      en: "English 6: t y"
+    description:
+      de: "Tasten: t y"
+      en: "Keys: t y"
+  - id: en-7
+    title:
+      de: "Englisch 7: w o"
+      en: "English 7: w o"
+    description:
+      de: "Tasten: w o"
+      en: "Keys: w o"
+  - id: en-8
+    title:
+      de: "Englisch 8: q p"
+      en: "English 8: q p"
+    description:
+      de: "Tasten: q p"
+      en: "Keys: q p"
+  - id: en-9
+    title:
+      de: "Englisch 9: b n"
+      en: "English 9: b n"
+    description:
+      de: "Tasten: b n"
+      en: "Keys: b n"
+  - id: en-10
+    title:
+      de: "Englisch 10: v m"
+      en: "English 10: v m"
+    description:
+      de: "Tasten: v m"
+      en: "Keys: v m"
+  - id: en-11
+    title:
+      de: "Englisch 11: c x , ."
+      en: "English 11: c x , ."
+    description:
+      de: "Tasten: c x , ."
+      en: "Keys: c x , ."
+  - id: en-12
+    title:
+      de: "Englisch 12: z ' ? -"
+      en: "English 12: z ' ? -"
+    description:
+      de: "Tasten: z ' ? -"
+      en: "Keys: z ' ? -"
 sections:
-  - id: zehn-finger
-    title: Warum die Grundreihe?
-    text: |
-      Auf der Grundreihe liegen deine Finger, wenn du nicht tippst: links auf a, s, d, f, rechts auf j, k, l.
-      Von dort erreicht jeder Finger seine Tasten. Wer die Grundreihe sicher findet, muss beim Tippen nicht mehr auf
-      die Tastatur schauen.
+  - id: warum
+    title:
+      de: Warum Zehnfingersystem?
+      en: Why touch typing?
+    text:
+      de: |
+        Wer mit allen zehn Fingern tippt und nicht auf die Tastatur schaut, schreibt schneller und macht weniger
+        Fehler. Jeder Finger hat seine Tasten und kehrt nach jedem Anschlag zur Grundreihe zurück. Wichtig ist am
+        Anfang die Genauigkeit, die Geschwindigkeit kommt mit dem Üben. Kurze Übungen an mehreren Tagen helfen mehr
+        als eine lange Stunde.
+      en: |
+        Typing with all ten fingers without looking at the keyboard is faster and makes fewer mistakes. Every finger
+        has its keys and returns to the home row after every keystroke. At the start, accuracy matters most; speed
+        comes with practice. Short sessions on several days help more than one long hour.
+  - id: quellen
+    title:
+      de: Quellen
+      en: Sources
+    text:
+      de: |
+        Die Reihenfolge der Tasten orientiert sich an der Schulpraxis, zum Beispiel am
+        [Leitfaden Tastaturschreiben des Kantons Schwyz](https://www.sz.ch/public/upload/assets/65825/Leitfaden_Tastaturschreiben.pdf)
+        (2024). Die Wörter hat der Ersteller der App selbst geschrieben.
+      en: |
+        The order of the keys follows school practice, for example the
+        [Leitfaden Tastaturschreiben of the canton of Schwyz](https://www.sz.ch/public/upload/assets/65825/Leitfaden_Tastaturschreiben.pdf)
+        (2024, in German). The words were written by the app's creator.

@@ -354,4 +354,68 @@ addresses: qg-privacy
 ```
 
 <!-- app: begin -->
+
+## Levels Are Not Locked
+
+Stars and stardust are kept on the device and shown on the map, but no level or chapter is locked: a teacher or a child
+may open any chapter by its address, and the core, which cannot read the device, could not enforce a lock against the
+key Enter. Locking and powerups from the stardust account are left to a later increment.
+
+```arc42
+:::decision
+id: dec-levels-not-locked
+title: No locked levels, progress shown only
+status: accepted
+date: 2026-10-17
+addresses: con-state-on-device
+:::
+```
+
+## Progress Is Saved by the UI
+
+The core stays pure and knows nothing of the device; the root component saves the result of a round when the core
+reaches its end, through the storage wrapper under the name `typonaut`, with stars and stardust per chapter only, far
+below the quota.
+
+```arc42
+:::decision
+id: dec-progress-in-ui
+title: The UI saves stars and stardust
+status: accepted
+date: 2026-10-17
+addresses: con-state-on-device, con-storage-quota
+:::
+```
+
+## Playthroughs Avoid Keys Outside a US Keyboard
+
+The end-to-end tests of the runtime press keys as Playwright knows them, which does not include ö, ä or ü. The
+playthroughs therefore use seeds whose typed words have none. Umlauts are covered by unit tests of the data.
+
+```arc42
+:::decision
+id: dec-playthroughs-us-keys
+title: Playthroughs type only keys of a US keyboard
+status: accepted
+date: 2026-10-17
+addresses: qg-checkable
+:::
+```
+
+## A Typing Game Against the Clock Declares Its Limits
+
+Comets arrive on their own and need a keyboard, so the app cannot be played with a screen reader or on a phone. The
+app's entry says so in `limits`; the app page still keeps labels, contrast and keyboard use, announces what happens, and
+works at 360 px.
+
+```arc42
+:::decision
+id: dec-typing-game-limits
+title: Limits declared for the timed game and the keyboard
+status: accepted
+date: 2026-10-17
+addresses: qg-accessibility
+:::
+```
+
 <!-- app: end -->

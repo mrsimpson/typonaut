@@ -155,4 +155,21 @@ involves: bb-e2e, bb-interactive-description, bb-interactive-playthroughs, bb-sh
 ```
 
 <!-- app: begin -->
+
+## Playing a round of Typonaut
+
+The learner opens a chapter, chooses a level and starts it. The core spawns comets over time from its seed; a key typed
+on the page picks and types a comet, a wrong key or a comet that arrives takes energy from the shield. When the level
+ends, the game view saves the stars and the stardust through the progress module, which writes to the device's storage,
+and shows the analysis of the keys that went wrong.
+
+```arc42
+:::runtime-scenario
+id: scenario-typonaut-round
+title: A round of Typonaut and saving its result
+trigger: The learner starts a level and plays it to its end
+involves: bb-shell, bb-game-rules, bb-course-lookup, bb-game-view, bb-keyboard-view, bb-progress, bb-course-de, bb-course-en, bb-tooling
+:::
+```
+
 <!-- app: end -->

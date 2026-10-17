@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=../../node_modules/@lernapps/app-templates/runtime/interactive/playthrough.v1.schema.json
+# Chapter 3 of the German course: the keys 1, 2 and 3 and the action "level" choose a level in the map, Enter starts it.
+route: de-3
+seed: 1
+steps:
+  - keys: ["3"]
+    state: { course: de, chapter: 3, phase: menu, level: 3 }
+    announce: "Level 3 gewählt."
+  - keys: ["2"]
+    state: { level: 2 }
+    announce: "Level 2 gewählt."
+  - inputs: [{ kind: action, name: level, value: 1 }]
+    state: { level: 1 }
+    announce: "Level 1 gewählt."
+  - keys: ["Enter"]
+    ticks: 40
+    state: { phase: play, level: 1, total: 10, spawned: 1 }
+    announce: "Level 1 beginnt. Tippe die fliegenden Wörter ab."
