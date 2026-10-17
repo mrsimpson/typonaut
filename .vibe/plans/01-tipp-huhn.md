@@ -199,7 +199,7 @@ creator's turns from here to the listing are counted in the retrospective (targe
 
 ### Content method
 
-Spielregeln (Kern, `src/core/`, rein und deterministisch; Sketches: `sketches/spiel.svg`, `sketches/ergebnis.svg`):
+Spielregeln (Kern, `src/core/`, rein und deterministisch; Sketches: `sketches/spiel.png`, `sketches/ergebnis.png`):
 - Ein Kurs ist eine Sprache mit ihrem Layout: Deutsch/QWERTZ oder Englisch/QWERTY. Die Wörter und die Tasten eines Kurses gehören zusammen. Die Oberfläche ist unabhängig davon auf Deutsch oder Englisch.
 - Ein Kapitel führt ein bis zwei neue Tasten ein (mit Großbuchstaben, siehe unten); es hat drei Level: 1 Einführung (nur Zeichenfolgen der neuen Tasten, Tastaturhilfe mit Finger), 2 Wörter (neue und alte Tasten, Hilfe nur für die nächste Taste), 3 Mix und Wiederholung (ohne Hilfe, mehr Kometen gleichzeitig).
 - Kometen starten außerhalb des Bildes und fliegen auf einer Parabel (Bahn aus Startpunkt, Zeit und Seed) zum Raumschiff. Der erste getippte Buchstabe wählt den ältesten Kometen mit diesem Anfangsbuchstaben; er bleibt gesperrt, bis er fertig ist. Jeder richtige Buchstabe färbt den Schweif um. Ein falscher Buchstabe zählt als Fehler, das Wort wackelt sanft.
@@ -252,7 +252,7 @@ one of them, stop and ask the creator to allow it, then run the command again. N
 - [ ] Kern: Kometenbahnen (Parabel, deterministisch aus Seed), Auswahl und Sperre des Wortes, Treffer, Fehler, Schild, Punkte mit Kombo, Level gewonnen/verloren, Fehlerstatistik je Taste. Dazu Playthroughs: Wort wählen und tippen; falsche Taste; Komet erreicht das Schiff; Level verloren; gleicher Seed, gleicher Ablauf. Commit.
 - [ ] Kursdaten Deutsch, Kapitel 1 bis 12, mit Wörtern und Datentest. Commit je Kapitelgruppe.
 - [ ] Kursdaten Englisch, Kapitel 1 bis 12, mit Wörtern und Datentest. Commit je Kapitelgruppe.
-- [ ] Oberfläche: Karte der Reise (Kapitel, Level, Sterne, Konto), Spielbildschirm nach `sketches/spiel.svg` (Schweif färbt sich, Tastaturhilfe nur in Level 1 und 2), Ergebnis und Analyse nach `sketches/ergebnis.svg`; Kurs- und Sprachwahl; alles per Tastatur bedienbar; Ansagen über `announce`. Commit.
+- [ ] Oberfläche: Karte der Reise (Kapitel, Level, Sterne, Konto), Spielbildschirm nach `sketches/spiel.png` (Schweif färbt sich, Tastaturhilfe nur in Level 1 und 2), Ergebnis und Analyse nach `sketches/ergebnis.png`; Kurs- und Sprachwahl; alles per Tastatur bedienbar; Ansagen über `announce`. Commit.
 - [ ] Texte Deutsch und Englisch in `src/messages/` vollständig; `app.yaml` mit Anleitung, Kompetenzen, Routen. Commit.
 - [ ] Speichern: Sterne und Sternenstaub je Kapitel mit `createStorage`, unter 100 kB. Commit.
 - [ ] Ruhe und Bewegung: `prefersReducedMotion`, kein Blitzen, Ton aus. Commit.

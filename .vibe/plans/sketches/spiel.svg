@@ -4,8 +4,8 @@
 <text x="16" y="26" fill="#cfd6ff" font-family="sans-serif" font-size="14">Kapitel 3 · Level 2</text>
 <text x="624" y="26" fill="#ffd166" font-family="sans-serif" font-size="14" text-anchor="end">Sternenstaub 340 · Kombo ×3</text>
 <path d="M60 330 Q200 20 330 200" fill="none" stroke="#6c7bd9" stroke-width="1.5" stroke-dasharray="4 5"/>
-<g font-family="monospace" font-size="22"><text x="150" y="110" fill="#ffd166">ha</text><text x="173" y="110" fill="#9aa6e8">llo</text></g>
-<text x="145" y="135" fill="#7f8bd0" font-family="sans-serif" font-size="11">Schweif leuchtet bis zum letzten richtigen Buchstaben</text>
+<g font-family="monospace" font-size="22"><text x="186" y="136" fill="#ffd166">ha</text><text x="209" y="136" fill="#9aa6e8">llo</text></g>
+<text x="16" y="52" fill="#7f8bd0" font-family="sans-serif" font-size="11">Schweif leuchtet bis zum letzten richtigen Buchstaben</text>
 <g font-family="monospace" font-size="22" fill="#9aa6e8"><text x="420" y="150">ghi</text><text x="480" y="260">haus</text></g>
 <g transform="translate(300 320)"><path d="M0 -26 L16 18 L0 8 L-16 18 Z" fill="#e8ecff"/><circle cx="0" cy="-6" r="4" fill="#6c7bd9"/></g>
 <rect x="16" y="368" width="200" height="14" rx="7" fill="#26305f"/><rect x="16" y="368" width="140" height="14" rx="7" fill="#4cc9a7"/>
