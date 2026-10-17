@@ -434,4 +434,22 @@ addresses: qg-understandable
 :::
 ```
 
+## Physical Keyboards Only, Said on Touch Devices
+
+Touch typing needs a physical keyboard: the on-screen keyboard of a phone or tablet has no home row to feel and no ten
+fingers. The game therefore does not offer the on-screen keyboard as input. On a device that has only touch input
+(`any-pointer: fine` is false, `coarse` is true) the map shows a note, and the game stays playable with a connected
+keyboard. The entry's `limits` says the same. Rejected: using the keyboard drawn for the hints as input (it would teach
+tapping with one finger).
+
+```arc42
+:::decision
+id: dec-physical-keyboard
+title: No on-screen keyboard as input, a note on touch devices
+status: accepted
+date: 2026-10-17
+addresses: qg-accessibility
+:::
+```
+
 <!-- app: end -->

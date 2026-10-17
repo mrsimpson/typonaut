@@ -98,6 +98,7 @@ The creator's own material does not exist; nothing local is committed.
 
 ## Rules learned from mistakes
 
+- Typonaut is for physical keyboards (`dec-physical-keyboard`): never add the drawn keyboard as an input. A touch-only device sees a note in the map; keep `limits` of the entry (no screen reader, no phone) in step.
 - The end-to-end tests cannot press ö, ä, ü or ß: pick a seed whose typed words have none (see `dec-playthroughs-us-keys`).
 - Numbers over 999 show in announcements with a dot in German (`1.754`): write them so in playthroughs.
 - The shell gives no key to a focused button or link: the root component keeps Tab from moving the focus in a round and takes the focus off a clicked level button; the core returns a new state object for keys that would scroll the page (space, arrows, Page, Home, End, Backspace), so the shell keeps their default away.

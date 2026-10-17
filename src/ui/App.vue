@@ -61,10 +61,14 @@ const otherLanguage = computed(() => ({
   lang: props.lang === "en" ? "de" : "en",
   href: `${props.lang === "en" ? "../../app/" : "../en/app/"}#${props.state.course}`,
 }));
+/** True on a device with only touch input: the game is for a physical keyboard, a note says so. */
+const needsKeyboard = ref(false);
 const canFullscreen = ref(false);
 let switchFullscreen: () => void = () => undefined;
 onMounted(() => {
   canFullscreen.value = document.fullscreenEnabled;
+  needsKeyboard.value =
+    !window.matchMedia("(any-pointer: fine)").matches && window.matchMedia("(any-pointer: coarse)").matches;
   switchFullscreen = () => {
     if (document.fullscreenElement !== null) void document.exitFullscreen();
     else void document.documentElement.requestFullscreen().catch(() => undefined);
@@ -192,6 +196,7 @@ watch(
             t(`switchTo.${state.course === "de" ? "en" : "de"}`)
           }}</a>
         </header>
+        <p v-if="needsKeyboard" class="notice" role="note">{{ t("needsKeyboard") }}</p>
 
         <nav class="planets" :aria-label="t('chapters')">
           <button
@@ -591,6 +596,17 @@ button {
 }
 
 .info {
+  text-align: center;
+}
+
+.notice {
+  max-width: 32rem;
+  font-size: 0.9rem;
+  margin: 0.6rem auto;
+  padding: 0.6rem 0.9rem;
+  border: 2px solid #ff6ad5;
+  border-radius: 0.6rem;
+  background: #2a1646;
   text-align: center;
 }
 

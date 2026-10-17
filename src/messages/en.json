@@ -63,5 +63,6 @@
   "fullscreen": "Full screen",
   "more": "More",
   "uiLanguage.de": "Deutsch",
-  "uiLanguage.en": "English"
+  "uiLanguage.en": "English",
+  "needsKeyboard": "Typonaut is made for touch typing and needs a real keyboard. You cannot play it on a phone or tablet without one. Connect a keyboard or use a computer."
 }

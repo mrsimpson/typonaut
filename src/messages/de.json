@@ -64,5 +64,6 @@
   "fullscreen": "Vollbild",
   "more": "Mehr",
   "uiLanguage.de": "Deutsch",
-  "uiLanguage.en": "English"
+  "uiLanguage.en": "English",
+  "needsKeyboard": "Typonaut ist zum Zehnfingerschreiben gemacht und braucht eine richtige Tastatur. Auf Handy und Tablet ohne Tastatur kannst du es nicht spielen. Schließe eine Tastatur an oder nimm einen Computer."
 }
