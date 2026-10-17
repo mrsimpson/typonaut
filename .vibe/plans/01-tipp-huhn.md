@@ -4,7 +4,7 @@
 # archetype: the kind of app, chosen at the end of Explore: explainer, interactive or quiz. null until then.
 archetype: interactive
 # phase: the phase you work in now: explore, plan, code or commit. Change it when you enter the next phase.
-phase: plan
+phase: code
 # prePushFailures: failed runs of the pre-push hook. The hook counts them. Never change this value.
 prePushFailures: 0
 ---
@@ -193,9 +193,9 @@ creator's turns from here to the listing are counted in the retrospective (targe
       content method in plain words: what learners will see and do, and what it cannot do.
 - [x] For every component and interactive exercise, show a sketch: a static SVG or image of what learners see, or
       the steps (what they do, what they see after each). A description in words alone is not enough.
-- [ ] **Checkpoint:** confirm the plan and the content method. Stop and wait for the creator. Change the plan if they
+- [x] **Checkpoint:** confirm the plan and the content method. Stop and wait for the creator. Change the plan if they
       ask, then ask again.
-- [ ] Set `phase: code`.
+- [x] Set `phase: code`.
 
 ### Content method
 
