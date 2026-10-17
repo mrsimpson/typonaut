@@ -2,7 +2,7 @@
 # Read by the git hooks, the review and the evals.
 # Schema: @lernapps/tooling/guidance/plan-front-matter.v1.schema.json. Keep all three keys.
 # archetype: the kind of app, chosen at the end of Explore: explainer, interactive or quiz. null until then.
-archetype: null
+archetype: interactive
 # phase: the phase you work in now: explore, plan, code or commit. Change it when you enter the next phase.
 phase: explore
 # prePushFailures: failed runs of the pre-push hook. The hook counts them. Never change this value.
@@ -40,6 +40,14 @@ This file guides you, the assistant, through the first version of an app, and sh
 One line each: the decision and why. The archetype is the first one. Add decisions in any phase.
 Mark a choice you made without asking the creator with "(guess)", and list it in the retrospective.
 -->
+
+- Archetype interactive: das Spiel (Wörter fliegen, abtippen) ist selbst der Inhalt; keine Erklärseiten nötig.
+- Lehrgang als Daten je Layout (QWERTZ/Deutsch, QWERTY/Englisch), Reihenfolge nach dem Schwyzer Leitfaden: Grundreihe, Großbuchstaben, dann paarweise neue Tasten.
+- Veröffentlichung unter https://mrsimpson.github.io/tipp-huhn/ (aus dem Repo-Owner abgeleitet).
+- Ersteller im Eintrag: "mrsimpson" (guess: Name nicht genannt, Repo-Owner verwendet).
+- Oberfläche (Texte) zunächst nur Deutsch (guess); Übungswörter und Layout deutsch und englisch.
+- Nur mit Hardware-Tastatur gedacht, nicht fürs Handy; das und der Zeitdruck kommen als "limits" in den Eintrag (guess).
+- Ruhige Gestaltung für Kinder: kein Blitzen, Explosion als sanfte Funken, Ton standardmäßig aus (Rat der Skill-Doku).
 
 ## Notes
 
@@ -95,15 +103,15 @@ from earlier answers. Write each answer under "Answers".
 - [x] Install the skills, if they are not installed yet: `npx skills add lernapps/tooling`. The app commits them.
 - [x] Ask what the app is for: what do learners do in it, and what do they learn or train?
 - [x] Ask who the learners are: subject, school year, what they know already.
-- [ ] Ask where the content comes from: written by the creator, or taken from others (with source and licence)?
-- [ ] Research the content: load the skill `lernapps-content-research` and follow it (in an app whose
+- [x] Ask where the content comes from: written by the creator, or taken from others (with source and licence)?
+- [x] Research the content: load the skill `lernapps-content-research` and follow it (in an app whose
       `.agents/skills/app-content/SKILL.md` is filled in, load that first; it takes precedence). Write the curriculum
       orientation (the Lehrplan, cited where you used one), the competencies by chapter and the verified sources
       under "Notes".
-- [ ] Fetch the entry schema of the app overview: https://lernapps.net/apps/schemas/entry.v1.schema.json. Read the
+- [x] Fetch the entry schema of the app overview: https://lernapps.net/apps/schemas/entry.v1.schema.json. Read the
       description of every property. Ask the creator what it needs to help adults (teachers, parents) find the app.
       Fill the "Entry draft" from the answers.
-- [ ] Choose the archetype from the answers: `explainer` (many pages of explanation and exercises), `interactive`
+- [x] Choose the archetype from the answers: `explainer` (many pages of explanation and exercises), `interactive`
       (one app page in the browser, plus a static start page) or `quiz` (questions with options and feedback).
       Write it under "Key decisions" with the reason; set `archetype`.
 - [ ] **Checkpoint:** research. Explain to the creator, in plain words, what you found and how: the curriculum
@@ -117,6 +125,9 @@ from earlier answers. Write each answer under "Answers".
 
 - Zweck: verspielte Version eines Zehn-Finger-Schreiblernprogramms für Kinder. Klassischer Lehrgang (Grundreihe, dann Schritt für Schritt die Tastatur erforschen). Die zu tippenden Zeichenfolgen fliegen wie im Spiel „Moorhuhn“ in einer Parabel über den Bildschirm und müssen abgetippt werden; ist die Folge getippt, explodiert das Wort und es gibt Punkte, mehr für schwierige Wörter.
 - Lernende: Start bei null, kein Vorwissen. Tastaturschreiben steht nicht im klassischen Lehrplan, es ist eher eine digitale Kompetenz.
+- Klassenstufen: ab 3., nach oben offen.
+- Sprache/Layout: Deutsch und Englisch, mit je eigenem Tastaturlayout (QWERTZ, QWERTY) und eigenen Zeichenfolgen/Wörtern.
+- Veröffentlichung: im persönlichen Repo mrsimpson/tipp-huhn auf GitHub Pages.
 - Auftrag: Recherchieren, welche Lernreihenfolge didaktisch sinnvoll ist; sie hängt von Tastaturlayout und Sprache ab.
 
 ### Entry draft
@@ -128,6 +139,26 @@ what is not known yet, such as the app's address before it is published. The lis
 -->
 
 ```yaml
+title: Tipp-Huhn
+subject: Informatik
+grades: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+summary: >-
+  Lerne das Zehnfingersystem Schritt für Schritt, von der Grundreihe bis zur ganzen Tastatur.
+  Wörter fliegen in einem Bogen über den Bildschirm; tippst du sie richtig ab, explodieren sie
+  und du sammelst Punkte. Mit deutscher und englischer Tastatur.
+url: https://mrsimpson.github.io/tipp-huhn/
+creator:
+  name: mrsimpson
+source: https://github.com/mrsimpson/tipp-huhn
+keywords: [Zehnfingersystem, Tastaturschreiben, Tippen lernen, Schreibtraining, Tastatur, Spiel]
+limits: >-
+  Nicht für Screenreader und nicht für das Handy gedacht: Die App braucht eine Tastatur,
+  und das Spiel läuft unter Zeitdruck.
+fitness:
+  account: false
+  install: false
+  storage: device
+  thirdParty: none
 ```
 
 ### Completed
