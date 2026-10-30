@@ -4,50 +4,68 @@
     "lernapps-app": {
       "source": "lernapps/tooling",
       "sourceType": "github",
-      "skillPath": "skills/lernapps-app/SKILL.md",
-      "computedHash": "0fea46b51b3bd47e4eaf9da2030ad18e34e50156a01f124c748176dfbe43d311"
+      "skillPath": "skills/process/lernapps-app/SKILL.md",
+      "computedHash": "a8cfb73a878da25ddf762d97dd60815003d243ac0209a223885c3454f7d82d26"
+    },
+    "lernapps-cli": {
+      "source": "lernapps/tooling",
+      "sourceType": "github",
+      "skillPath": "skills/tooling/lernapps-cli/SKILL.md",
+      "computedHash": "ee41e1a4208794a04dc8c4177d91dda825663aac10ba0d3ead95f829a8672b96"
+    },
+    "lernapps-commit": {
+      "source": "lernapps/tooling",
+      "sourceType": "github",
+      "skillPath": "skills/process/lernapps-commit/SKILL.md",
+      "computedHash": "61acc0ee0e680018dc82c6ac25fd42f1b0eb159adbc5e485b45d75af88541d3a"
     },
     "lernapps-content-growth": {
       "source": "lernapps/tooling",
       "sourceType": "github",
-      "skillPath": "skills/lernapps-content-growth/SKILL.md",
-      "computedHash": "e84d94a6e5e422266866ce00140663627d6612680a85b4fde780a6f1a7082ed4"
+      "skillPath": "skills/process/lernapps-content-growth/SKILL.md",
+      "computedHash": "c982b39dd66ffd40416e8ede7107e3feb0881f654f1311c95818a3fa5cd89c56"
+    },
+    "lernapps-content-questions": {
+      "source": "lernapps/tooling",
+      "sourceType": "github",
+      "skillPath": "skills/content/lernapps-content-questions/SKILL.md",
+      "computedHash": "771a639a53027873e569f805a4a29b42edb75b6a3783dfc159c26de22e6eee6e"
     },
     "lernapps-content-research": {
       "source": "lernapps/tooling",
       "sourceType": "github",
-      "skillPath": "skills/lernapps-content-research/SKILL.md",
-      "computedHash": "4e7fc504d5a4e7e23c666970ea4c2412a71f166117b75e80440ea6ec6341f6d8"
+      "skillPath": "skills/content/lernapps-content-research/SKILL.md",
+      "computedHash": "a4314f1d89fb56e4199b9729cd293ac8e1065abaf4d5a43455163205e280cc48"
     },
     "lernapps-exercise-patterns": {
       "source": "lernapps/tooling",
       "sourceType": "github",
-      "skillPath": "skills/lernapps-exercise-patterns/SKILL.md",
-      "computedHash": "06bf162cccb678afac1c220e6d0f292b454a97756009ec00a25f3fbdb4079d53"
+      "skillPath": "skills/content/lernapps-exercise-patterns/SKILL.md",
+      "computedHash": "173e341a776970dbd87ce1d1d72c98b44499c7725399aee4cd2fc799eb5245c8"
     },
-    "lernapps-explainer": {
+    "lernapps-github": {
       "source": "lernapps/tooling",
       "sourceType": "github",
-      "skillPath": "skills/lernapps-explainer/SKILL.md",
-      "computedHash": "98fb247e31411e7dbfddae2f965db2a8a29a10ad4c2d44de5cdb7bc5f2fc9cf0"
+      "skillPath": "skills/process/lernapps-github/SKILL.md",
+      "computedHash": "f62411ea0f07a6bc98ce5465a125998e7b14bfe0c3e835854b240a570caf3bbe"
     },
     "lernapps-interactive": {
       "source": "lernapps/tooling",
       "sourceType": "github",
-      "skillPath": "skills/lernapps-interactive/SKILL.md",
-      "computedHash": "49e3f6a6c301c530a94406f7784bc8cde2f2b311cc93feb2421993995dcfff25"
+      "skillPath": "skills/archetypes/lernapps-interactive/SKILL.md",
+      "computedHash": "33764ba79d1ce70f899e7203213f4a008dc32b3b22a17ebff47c708bb7dfe673"
+    },
+    "lernapps-interactive-design": {
+      "source": "lernapps/tooling",
+      "sourceType": "github",
+      "skillPath": "skills/archetypes/lernapps-interactive-design/SKILL.md",
+      "computedHash": "246bc0325e5d93079283ea70d1a92a42905049c23a73a4dc708834ad3082fa82"
     },
     "lernapps-listing": {
       "source": "lernapps/tooling",
       "sourceType": "github",
-      "skillPath": "skills/lernapps-listing/SKILL.md",
-      "computedHash": "8583e7010d9b285b4fde0c2b1139f505734967246f471c2b833e059abb031464"
-    },
-    "lernapps-quiz": {
-      "source": "lernapps/tooling",
-      "sourceType": "github",
-      "skillPath": "skills/lernapps-quiz/SKILL.md",
-      "computedHash": "954b93da6b01f25859ad0013dd05623a7e4f16642c0c80bbe13205d90dba844d"
+      "skillPath": "skills/process/lernapps-listing/SKILL.md",
+      "computedHash": "0d720c85c381d4741f938eec2ff2b6d51eafeceb14a36834740e579482446835"
     },
     "rules-review": {
       "source": "lernapps/tooling",
